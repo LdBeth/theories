@@ -1,5 +1,5 @@
 (*
- * We need a rule for when rewrites are valid.
+ * Define types over the state.
  *
  * ----------------------------------------------------------------
  *
@@ -10,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1999 Jason Hickey, Cornell University
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,35 +30,33 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
-include Base_auto_tactic
+include Itt_theory
+include Sil_types
 
-open Refiner.Refiner.TermType
+(************************************************************************
+ * DEFINITIONS                                                          *
+ ************************************************************************)
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
+prim_rw unfold_unit : Sil_types!unit <--> lambda{s. Itt_unit!unit}
 
-declare rw_just
+prim_rw unfold_int : Sil_types!int <--> lambda{s. Itt_int!int}
 
-rule rewriteAxiom1 'H :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
+prim_rw unfold_union : Sil_types!union{'A; 'B} <-->
+   lambda{s. Itt_union!union{.'A 's; .'B 's}}
 
-rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
+prim_rw unfold_prod : Sil_types!dprod{'A; v. 'B['v]} <-->
+   lambda{s. Itt_dprod!prod{.'A 's; v. 'B['v] 's}}
 
-rule rewriteSym 'H :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
+prim_rw unfold_fun : Sil_types!"fun"{'A; v. 'B['v]} <-->
+   lambda{s. Itt_rfun!"fun"{.'A 's; v. 'B['v] 's}}
 
-topval d_rewrite_axiomT : tactic
-
-topval rewriteC : term -> conv
-topval rewriteT : term -> tactic
-topval rewriteSymT : tactic
+prim_rw unfold_ref_type : Sil_types!ref_type <-->
+   lambda{s. label_type}
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

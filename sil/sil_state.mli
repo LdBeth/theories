@@ -1,5 +1,5 @@
 (*
- * We need a rule for when rewrites are valid.
+ * Operations on the state.
  *
  * ----------------------------------------------------------------
  *
@@ -10,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1999 Jason Hickey, Cornell University
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,35 +30,31 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
-include Base_auto_tactic
+include Base_theory
 
-open Refiner.Refiner.TermType
+(*
+ * Labels in the state.
+ *)
+declare first
+declare next{'l}
+declare if_eq_label{'e1; 'e2; 'e3; 'e4}
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
+(*
+ * State operations.
+ *)
+declare empty
+declare fetch{'s; 'v}
+declare store{'s; 'v1; 'v2}
+declare alloc{'s1; 'v; s2, l. 'e['s2; 'l]}
 
-declare rw_just
-
-rule rewriteAxiom1 'H :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
-
-rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
-
-rule rewriteSym 'H :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
-
-topval d_rewrite_axiomT : tactic
-
-topval rewriteC : term -> conv
-topval rewriteT : term -> tactic
-topval rewriteSymT : tactic
+prec prec_fetch
+prec prec_store
+prec prec_alloc
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

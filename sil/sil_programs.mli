@@ -1,5 +1,5 @@
 (*
- * We need a rule for when rewrites are valid.
+ * This is the definition of a Simple Imperative Language.
  *
  * ----------------------------------------------------------------
  *
@@ -10,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1999 Jason Hickey, Cornell University
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,35 +30,48 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
-include Base_auto_tactic
+include Base_theory
 
-open Refiner.Refiner.TermType
+(*
+ * Numbers.
+ *)
+declare number[i:n]
+declare "add"{'e1; 'e2}
+declare "sub"{'e1; 'e2}
+declare "if"{'e1; 'e2; 'e3; 'e4}
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
+(*
+ * Disjoint union.
+ *)
+declare inl{'e1}
+declare inr{'e1}
+declare decide{'e1; x. 'e2['x]; y. 'e3['y]}
 
-declare rw_just
+(*
+ * Tuples.
+ *)
+declare pair{'e1; 'e2}
+declare spread{'e1; x, y. 'e2['x; 'y]}
 
-rule rewriteAxiom1 'H :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
+(*
+ * Reference cells.
+ *)
+declare pointer{'l}
+declare ref{'e1}
+declare deref{'e1}
+declare assign{'e1; 'e2}
+declare dot
 
-rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
-
-rule rewriteSym 'H :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
-
-topval d_rewrite_axiomT : tactic
-
-topval rewriteC : term -> conv
-topval rewriteT : term -> tactic
-topval rewriteSymT : tactic
+(*
+ * Functions.
+ *)
+declare lambda{v. 'e1['v]}
+declare apply{'e1; 'e2}
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)
