@@ -1,20 +1,8 @@
-(*!
- * @begin[doc]
- * @theory[Mp_mc_theory]
- *
- * The MC theory (all it's modules have the ``Mp_mc_'' prefix) attempts
- * to formalize the Mojave Compiler Collection's (MCC) functional intermediate
- * representation (FIR).
- *
- * (Documentation incomplete.  I should put the theory overview here.)
- *
- * The @tt{Mp_mc_theory} module itself is provided as a convinience.
- * It simply includes all the modules that make up the MC theory.
- * @end[doc]
+(*
+ * Convert preFIR terms to FIR terms.
  *
  * ----------------------------------------------------------------
  *
- * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -22,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ * Copyright (C) 2002 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,24 +26,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
- * @end[license]
+ * Author: Adam Granicz
+ * Email:  granicz@cs.caltech.edu
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
-include Mp_mc_term_op
-include Mp_mc_fir_base
-include Mp_mc_fir_ty
-include Mp_mc_fir_exp
-include Mp_mc_fir_prog
-include Mp_mc_fir_eval
+include Base_theory
+include Itt_theory
 include Mp_mc_fir_phobos_exp
-include Mp_mc_fir_phobos
-include Mp_mc_deadcode
-include Mp_mc_const_elim
-(*! @docoff *)
+include Mp_mc_fir_exp
+
+open Opname
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
+open Refiner.Refiner.RefineError
+open Tactic_type.Conversionals
+
+topval test_rewrite : conv -> term -> term
+topval preFirToFirC : conv

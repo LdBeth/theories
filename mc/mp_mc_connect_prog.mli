@@ -41,70 +41,8 @@ open Fir
 open Refiner.Refiner.Term
 
 (*
- * Convert to and from unop.
+ * Convert to and from fundef.
  *)
 
-val term_of_unop : unop -> term
-val unop_of_term : term -> unop
-
-(*
- * Convert to and from binop.
- *)
-
-val term_of_binop : binop -> term
-val binop_of_term : term -> binop
-
-(*
- * Convert to and from frame_label.
- *)
-
-val term_of_frame_label : frame_label -> term
-val frame_label_of_term : term -> frame_label
-
-(*
- * Convert to and from atom.
- *)
-
-val term_of_atom : atom -> term
-val atom_of_term : term -> atom
-
-(*
- * Convert to and from alloc_op.
- *)
-
-val term_of_alloc_op : alloc_op -> term
-val alloc_op_of_term : term -> alloc_op
-
-(*
- * Convert to and from tailop.
- *)
-
-val term_of_tailop : tailop -> term
-val tailop_of_term : term -> tailop
-
-(*
- * Convert to and from predicate / assertion terms.
- *)
-
-val term_of_pred : pred -> term
-val pred_of_term : term -> pred
-
-(*
- * Convert debugging info to and from terms.
- *)
-
-val term_of_debug_line : debug_line -> term
-val debug_line_of_term : term -> debug_line
-
-val term_of_debug_vars : debug_vars -> term
-val debug_vars_of_term : term -> debug_vars
-
-val term_of_debug_info : debug_info -> term
-val debug_info_of_term : term -> debug_info
-
-(*
- * Convert to and from exp.
- *)
-
-val term_of_exp : exp -> term
-val exp_of_term : term -> exp
+val term_of_fundef : fundef -> term
+val fundef_of_term : term -> fundef

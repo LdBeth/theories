@@ -1,15 +1,9 @@
 (*!
  * @begin[doc]
- * @theory[Mp_mc_theory]
+ * @theory[Mp_mc_fir_phobos_exp]
  *
- * The MC theory (all it's modules have the ``Mp_mc_'' prefix) attempts
- * to formalize the Mojave Compiler Collection's (MCC) functional intermediate
- * representation (FIR).
- *
- * (Documentation incomplete.  I should put the theory overview here.)
- *
- * The @tt{Mp_mc_theory} module itself is provided as a convinience.
- * It simply includes all the modules that make up the MC theory.
+ * The @tt[Mp_mc_fir_phobos_exp] module provides term declarations
+ * for the Phobos FIR output.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -22,7 +16,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ * Copyright (C) 2002 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +32,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
+ * Author: Adam Granicz
+ * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
 
@@ -48,14 +42,26 @@
  * @parents
  * @end[doc]
  *)
-include Mp_mc_term_op
-include Mp_mc_fir_base
-include Mp_mc_fir_ty
-include Mp_mc_fir_exp
-include Mp_mc_fir_prog
-include Mp_mc_fir_eval
-include Mp_mc_fir_phobos_exp
-include Mp_mc_fir_phobos
-include Mp_mc_deadcode
-include Mp_mc_const_elim
+include Base_theory
 (*! @docoff *)
+
+declare variable[v:s]
+declare string[s:s]
+declare number[n:s]
+
+declare letUnop[v:s]{ 'ty; 'unop; 'a}
+declare letBinop[v:s]{ 'ty; 'binop; 'a1; 'a2 }
+declare letExt[v:s]{'ty1; 'filename; 'ty2; 'args}
+declare call{'label; 'f; 'args}
+declare letAlloc[v:s]{'op}
+declare letSubscript[v:s]{'op; 'ty; 'v2; 'a}
+declare setSubscript{'op; 'label; 'var; 'a1; 'ty; 'a2}
+declare setGlobal{'sub_value; 'label; 'var; 'ty; 'a}
+declare memcpy{'op; 'label; 'v1; 'a1; 'v2; 'a2; 'a3}
+declare assertExp{'var; 'pred}
+declare debug{'debug_info}
+declare tailCall{'label; 'f; 'params}
+declare specialCall{'label; 'tailop}
+declare matchExp{'a; 'list}
+declare typeCase{'a1; 'a2; 'v1; 'v2; 'e1; 'e2}
+

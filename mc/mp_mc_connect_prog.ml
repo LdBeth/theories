@@ -34,77 +34,35 @@
 
 (* Open MCC ML namespaces. *)
 
+open Rawint
+open Rawfloat
 open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.RefineError
+open Mp_mc_fir_prog
+open Mp_mc_connect_base
+open Mp_mc_connect_ty
+open Mp_mc_connect_exp
 
 (*
- * Convert to and from unop.
+ * Convert to and from fundef.
  *)
 
-val term_of_unop : unop -> term
-val unop_of_term : term -> unop
+let term_of_fundef (line, ty, vars, exp) =
+   mk_fundef_term    (term_of_debug_line line)
+                     (term_of_ty ty)
+                     (term_of_list term_of_var vars)
+                     (term_of_exp exp)
 
-(*
- * Convert to and from binop.
- *)
-
-val term_of_binop : binop -> term
-val binop_of_term : term -> binop
-
-(*
- * Convert to and from frame_label.
- *)
-
-val term_of_frame_label : frame_label -> term
-val frame_label_of_term : term -> frame_label
-
-(*
- * Convert to and from atom.
- *)
-
-val term_of_atom : atom -> term
-val atom_of_term : term -> atom
-
-(*
- * Convert to and from alloc_op.
- *)
-
-val term_of_alloc_op : alloc_op -> term
-val alloc_op_of_term : term -> alloc_op
-
-(*
- * Convert to and from tailop.
- *)
-
-val term_of_tailop : tailop -> term
-val tailop_of_term : term -> tailop
-
-(*
- * Convert to and from predicate / assertion terms.
- *)
-
-val term_of_pred : pred -> term
-val pred_of_term : term -> pred
-
-(*
- * Convert debugging info to and from terms.
- *)
-
-val term_of_debug_line : debug_line -> term
-val debug_line_of_term : term -> debug_line
-
-val term_of_debug_vars : debug_vars -> term
-val debug_vars_of_term : term -> debug_vars
-
-val term_of_debug_info : debug_info -> term
-val debug_info_of_term : term -> debug_info
-
-(*
- * Convert to and from exp.
- *)
-
-val term_of_exp : exp -> term
-val exp_of_term : term -> exp
+let fundef_of_term t =
+   try
+      let line, ty, vars, exp = dest_fundef_term t in
+         (debug_line_of_term line),
+         (ty_of_term ty),
+         (list_of_term var_of_term vars),
+         (exp_of_term exp)
+   with
+      (* Reprint errors to narrow down term with error. *)
+      _ -> report_error "fundef_of_term" t
