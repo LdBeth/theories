@@ -1,27 +1,27 @@
 # Libraries
 REF_ROOT := ../..
-INCLUDE := -I . -I $(REF_ROOT)/mllib -I $(REF_ROOT)/refiner -I ../tactic
+INCLUDE := -I . -I $(REF_ROOT)/mllib -I $(REF_ROOT)/refiner -I ../tactic -I ../base -I ../itt
 OCAMLFLAGS := -g -root $(REF_ROOT)
 OCAMLC := $(REF_ROOT)/filter/prlcomp.run
 CAMLP4 := $(REF_ROOT)/filter/prlcomp.run -E -root $(REF_ROOT)
 
-# Common files
-MLZFILES :=\
-	base_theory
+# Program files
+PFILES :=\
+	rw_beta
 
-# Library files
-LMFILES :=\
-	typeinf\
-	nuprl_font\
-	base_dform\
-	base_dtactic\
-	base_theory
+# Libraries
+MLLIBS :=\
+	../../mllib/util\
+	../../refiner/refiner\
+	../tactic/tactics\
+	../base/base\
+	../itt/itt
 
 # Name of main libraris
-MAIN = base
+MAIN = rw
 
-all: $(MAIN).cma
-opt: $(MAIN).cmxa
+all: $(MAIN).run
+opt: $(MAIN).opt
 
 clean::
 	del -f *.p4* *.pp*
