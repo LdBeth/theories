@@ -1,5 +1,5 @@
 (*
- * The D tactic performs a case selection on the conclusion opname.
+ * We need a rule for when rewrites are valid.
  *
  * ----------------------------------------------------------------
  *
@@ -30,52 +30,33 @@
  * jyh@cs.cornell.edu
  *)
 
+include Perv
 include Base_auto_tactic
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.Refine
-
 open Tactic_type
-open Tactic_type.Tacticals
 
 open Base_auto_tactic
 
-(*
- * This are the types.
- *)
-type elim_data
-type intro_data
+declare rw_just
 
-type intro_option =
-   SelectOption of int            (* Select among multiple introduction rules *)
+prim rewriteAxiom 'H :
+   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} } =
+   rw_just
 
-type elim_option =
-   ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
+let d_rewrite_axiomT p =
+   rewriteAxiom (Sequent.hyp_count_addr p) p
 
-resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
-resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
-
-(*
- * Easy adding.
- *)
-val add_intro_info : intro_resource -> (term * tactic) list -> intro_resource
-
-(*
- * The inherited d tactic.
- *)
-val d_prec : auto_prec
-
-topval dT : int -> tactic
-
-(*
- * Run dT 0 so many times.
- *)
-topval dForT : int -> tactic
+let trivial_resource =
+   Mp_resource.improve trivial_resource (**)
+      { auto_name = "triv_equalT";
+        auto_prec = trivial_prec;
+        auto_tac = d_rewrite_axiomT
+      }
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
+ * Caml-master: "refiner"
  * End:
  * -*-
  *)

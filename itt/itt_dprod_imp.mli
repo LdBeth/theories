@@ -1,5 +1,5 @@
 (*
- * The D tactic performs a case selection on the conclusion opname.
+ * Derive the dependent-product from the very-dependent function type.
  *
  * ----------------------------------------------------------------
  *
@@ -10,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1999 Jason Hickey, Cornell University
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,52 +30,19 @@
  * jyh@cs.cornell.edu
  *)
 
-include Base_auto_tactic
+include Itt_rfun
+include Itt_unit
+include Itt_union
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.Refine
+open Tactic_type.Conversionals
 
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Base_auto_tactic
-
-(*
- * This are the types.
- *)
-type elim_data
-type intro_data
-
-type intro_option =
-   SelectOption of int            (* Select among multiple introduction rules *)
-
-type elim_option =
-   ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
-
-resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
-resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
-
-(*
- * Easy adding.
- *)
-val add_intro_info : intro_resource -> (term * tactic) list -> intro_resource
-
-(*
- * The inherited d tactic.
- *)
-val d_prec : auto_prec
-
-topval dT : int -> tactic
-
-(*
- * Run dT 0 so many times.
- *)
-topval dForT : int -> tactic
+topval fold_left : conv
+topval fold_right : conv
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

@@ -1,5 +1,5 @@
 (*
- * The D tactic performs a case selection on the conclusion opname.
+ * We need a rule for when rewrites are valid.
  *
  * ----------------------------------------------------------------
  *
@@ -30,52 +30,22 @@
  * jyh@cs.cornell.edu
  *)
 
+include Perv
 include Base_auto_tactic
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.Refine
-
-open Tactic_type
 open Tactic_type.Tacticals
 
-open Base_auto_tactic
+declare rw_just
 
-(*
- * This are the types.
- *)
-type elim_data
-type intro_data
+rule rewriteAxiom 'H :
+   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
 
-type intro_option =
-   SelectOption of int            (* Select among multiple introduction rules *)
-
-type elim_option =
-   ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
-
-resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
-resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
-
-(*
- * Easy adding.
- *)
-val add_intro_info : intro_resource -> (term * tactic) list -> intro_resource
-
-(*
- * The inherited d tactic.
- *)
-val d_prec : auto_prec
-
-topval dT : int -> tactic
-
-(*
- * Run dT 0 so many times.
- *)
-topval dForT : int -> tactic
+topval d_rewrite_axiomT : tactic
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
+ * Caml-master: "refiner"
  * End:
  * -*-
  *)
