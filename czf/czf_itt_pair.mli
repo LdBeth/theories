@@ -1,16 +1,9 @@
 (*
- * Display forms for basic objects.
+ * Pairing.
  *
  * ----------------------------------------------------------------
  *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 2000 Jason Hickey, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,37 +20,29 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * jyh@cs.caltech.edu
  *)
 
-include Perv
-include Nuprl_font
+include Czf_itt_union
+include Czf_itt_singleton
 
-(*
- * Other commands.
- *)
-declare bvar{var[v:v]}
-declare " "
-declare "^"
-declare "_"
-declare "{"
-declare "}"
-declare "$"
-declare "["
-declare "]"
-declare ";"
-declare "\\"
+(************************************************************************
+ * TERMS
+ ************************************************************************)
 
-(*
- * Length of a list.
- *)
-declare df_length{'l}
-declare df_last{'l}
+declare pair{'s1; 's2}
+
+(************************************************************************
+ * REWRITES
+ ************************************************************************)
+
+rewrite unfold_pair : pair{'s1; 's2} <-->
+   union{sing{'s1}; sing{'s2}}
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "compile"
  * End:
  * -*-
  *)
