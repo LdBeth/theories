@@ -1,5 +1,5 @@
 (*
- * The base theory collects everything.
+ * Basic arithmetic operations.
  *
  * ----------------------------------------------------------------
  *
@@ -31,23 +31,35 @@
  *
  *)
 
-include Summary
-include Sequent
-include Tacticals
-include Conversionals
-include Base_dform
-include Nuprl_font
-include Typeinf
-include Base_dtactic
-include Base_auto_tactic
-include Base_cache
-include Base_rewrite
-include Base_meta
+(*
+ * Meta-operations.
+ *)
+declare meta_sum{'a; 'b}
+declare meta_diff{'a; 'b}
+declare meta_prod{'a; 'b}
+declare meta_quot{'a; 'b}
+declare meta_rem{'a; 'b}
+
+declare meta_eq{'a; 'b; 'tt; 'ff}
+declare meta_le{'a; 'b; 'tt; 'ff}
+declare meta_lt{'a; 'b; 'tt; 'ff}
+
+(*
+ * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
+ *)
+ml_rw reduce_meta_sum : meta_sum{'a; 'b}
+ml_rw reduce_meta_diff : meta_diff{'a; 'b}
+ml_rw reduce_meta_prod : meta_prod{'a; 'b}
+ml_rw reduce_meta_quot : meta_quot{'a; 'b}
+ml_rw reduce_meta_rem  : meta_rem{'a; 'b}
+ml_rw reduce_meta_eq : meta_eq{'a; 'b; 'tt; 'ff}
+ml_rw reduce_meta_lt : meta_lt{'a; 'b; 'tt; 'ff}
+ml_rw reduce_meta_le : meta_le{'a; 'b; 'tt; 'ff}
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "prlcomp.run"
+ * Caml-master: "mp.run"
  * End:
  * -*-
  *)
