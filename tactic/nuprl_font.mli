@@ -11,24 +11,76 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
+
+(*
+ * Display control.
+ *)
+declare pagebreak
+
+(*
+ * Fonts.
+ * Each of these can be used with a string, with a term,
+ * or unbalanced.
+ *
+ * For example, all of these are the same:
+ *    bold["["]
+ *    bold{"["}
+ *    bold_begin "[" bold_end
+ *)
+declare info[name:s]
+declare info_begin
+declare info_end
+declare keyword[name:s]
+declare keyword_begin
+declare keyword_end
+declare bf[name:s]
+declare bf_begin
+declare bf_end
+declare it[name:s]
+declare it_begin
+declare it_end
+declare sym[name:s]
+declare sym_begin
+declare sym_end
+declare em[name:s]
+declare em_begin
+declare em_end
+declare tt[name:s]
+declare tt_begin
+declare tt_end
+declare sub[name:s]
+declare sub_begin
+declare sub_end
+declare sup[name:s]
+declare sup_begin
+declare sup_end
+declare small[name:s]
+declare small_begin
+declare small_end
+
+(*
+ * HTML control.
+ *)
+declare cd_begin[command:s]
+declare cd_end
 
 (* Displays *)
 declare mathbbA

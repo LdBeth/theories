@@ -46,7 +46,9 @@ open Refiner.Refiner.RefineError
 
 open Mp_resource
 open Simple_print
-open Term_table
+open Term_match_table
+
+open Tactic_type.Conversionals
 
 (*
  * Debug statement.
@@ -69,164 +71,47 @@ let debug_reduce =
         debug_value = false
       }
 
-(************************************************************************
- * INHERITANCE                                                          *
- ************************************************************************)
-
-type env = Rewrite_type.env
-type conv = Rewrite_type.conv
-
-let env_term = Rewrite_type.env_term
-let env_goal = Rewrite_type.env_goal
-let env_arg = Rewrite_type.env_arg
-let get_conv = Rewrite_type.get_conv
-
-let rw = Rewrite_type.rw
-let prefix_andthenC = Rewrite_type.prefix_andthenC
-let prefix_orelseC = Rewrite_type.prefix_orelseC
-let addrC = Rewrite_type.addrC
-let idC = Rewrite_type.idC
-let foldC = Rewrite_type.foldC
-let makeFoldC = Rewrite_type.makeFoldC
-let cutC = Rewrite_type.cutC
-let funC = Rewrite_type.funC
-
-(************************************************************************
- * SEARCH                                                               *
- ************************************************************************)
-
 (*
- * Failure.
+ * Toploop values.
  *)
-let failC err =
-   funC (fun _ -> raise (RefineError ("failC", StringError err)))
-
-let failWithC (name, err) =
-   funC (fun _ -> raise (RefineError (name, err)))
-
-(*
- * Trial.
- *)
-let tryC rw =
-   rw orelseC idC
-
-(*
- * First subterm that works.
- *)
-let someSubC conv =
-   let someSubCE env =
-      let t = env_term env in
-      let count = subterm_count t in
-      let rec subC i =
-         if i = count then
-            failWithC ("subC", StringError "all subterms failed")
-         else
-            (addrC [i] conv) orelseC (subC (i + 1))
-      in
-         subC 0
-   in
-      funC someSubCE
-
-(*
- * Apply to all subterms.
- *)
-let allSubC conv =
-   let allSubCE conv env =
-      let t = env_term env in
-      let count = subterm_count t in
-      let rec subC conv count i =
-         if i = count then
-            idC
-         else
-            (addrC [i] conv) andthenC (subC conv count (i + 1))
-      in
-         subC conv count 0
-   in
-      funC (allSubCE conv)
-
-(*
- * Outermost terms.
- * HigherC has been moved into the refiner
- * for efficiency.
- *)
-let higherC = Rewrite_type.higherC
-
-let rwh conv i =
-   rw (higherC conv) i
-
-(*
- * Apply to leftmost-innermost term.
- *)
-let rec lowerC rw =
-   let lowerCE e =
-      ((someSubC (lowerC rw)) orelseC rw)
-   in
-      funC lowerCE
-
-(*
- * Apply to all terms possible from innermost to outermost.
- *)
-let rec sweepUpC rw =
-   let sweepUpCE e =
-      ((allSubC (sweepUpC rw)) andthenC (tryC rw))
-   in
-      funC sweepUpCE
-
-let rec sweepDnC rw =
-   let sweepDnCE e =
-      ((tryC rw) andthenC (allSubC (sweepDnC rw)))
-   in
-      funC sweepDnCE
-
-(*
- * Use the first conversion that works.
- *)
-let rec firstC = function
-   [conv] ->
-      conv
- | conv :: t ->
-      conv orelseC firstC t
- | [] ->
-      raise (RefineError ("firstC", StringError "empty argument list"))
-
-(*
- * Repeat the conversion until nothing more happens.
- *)
-let repeatC conv =
-   let repeatCE env =
-      let rec repeat t env =
-         let t' = env_term env in
-            (if alpha_equal t t' then
-                idC
-             else
-                conv andthenC tryC (funC (repeat t')))
-      in
-      let t = env_term env in
-         (conv andthenC (funC (repeat t)))
-   in
-      funC repeatCE
-
-let rec repeatForC i conv =
-   let repeatForCE env =
-      if i = 0 then
-         idC
-      else
-         conv andthenC (repeatForC (i - 1) conv)
-   in
-      funC repeatForCE
+let rw = Tactic_type.Conversionals.rw
+let rwh = Tactic_type.Conversionals.rwh
+let rwc = Tactic_type.Conversionals.rwc
+let rwch = Tactic_type.Conversionals.rwch
+let prefix_andthenC = Tactic_type.Conversionals.prefix_andthenC
+let prefix_orelseC = Tactic_type.Conversionals.prefix_orelseC
+let addrC = Tactic_type.Conversionals.addrC
+let clauseC = Tactic_type.Conversionals.clauseC
+let idC = Tactic_type.Conversionals.idC
+let foldC = Tactic_type.Conversionals.foldC
+let makeFoldC = Tactic_type.Conversionals.makeFoldC
+let cutC = Tactic_type.Conversionals.cutC
+let failC = Tactic_type.Conversionals.failC
+let tryC = Tactic_type.Conversionals.tryC
+let someSubC = Tactic_type.Conversionals.someSubC
+let allSubC = Tactic_type.Conversionals.allSubC
+let higherC = Tactic_type.Conversionals.higherC
+let lowerC = Tactic_type.Conversionals.lowerC
+let sweepUpC = Tactic_type.Conversionals.sweepUpC
+let sweepDnC = Tactic_type.Conversionals.sweepDnC
+let firstC = Tactic_type.Conversionals.firstC
+let repeatC = Tactic_type.Conversionals.repeatC
+let repeatForC = Tactic_type.Conversionals.repeatForC
 
 (************************************************************************
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-type reduce_data = conv term_table
+type reduce_data = (conv, conv) term_table
 
-resource (term * conv, conv, reduce_data, meta_term * conv) reduce_resource
+resource (term * conv, conv, reduce_data, conv) reduce_resource
 
 (*
  * Extract a D tactic from the data.
  * The tactic checks for an optable.
  *)
+let identity x = x
+
 let extract_data tbl =
    let rw e =
       let t = env_term e in
@@ -235,7 +120,7 @@ let extract_data tbl =
             (* Find and apply the right tactic *)
             if !debug_reduce then
                eprintf "Conversionals: lookup %a%t" debug_print t eflush;
-            let _, _, conv = Term_table.lookup "Conversionals.extract_data" tbl t in
+            let _, _, conv = Term_match_table.lookup "Conversionals.extract_data" tbl identity t in
                conv
          with
             Not_found ->
@@ -270,7 +155,7 @@ let improve_resource data x =
       end;
    improve_data x data
 
-let improve_resource_arg data (mterm, conv) =
+let improve_resource_arg data name cvars vars args params mterm conv =
    match mterm with
       MetaIff (MetaTheorem t, _) ->
          improve_resource data (t, conv)

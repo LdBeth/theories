@@ -12,9 +12,8 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Tacticals
-open Conversionals
-open Sequent
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 topval substT : term -> int -> tactic
 topval hypSubstT : int -> int -> tactic
@@ -32,13 +31,13 @@ topval univTypeT : term -> tactic
 topval  equalRefComplT : term -> tactic
 
 topval mem_col_memT : term -> tactic
-      
+
 topval d_colT : int -> tactic
 topval cutColT : term -> tactic
 topval cutColS : term -> tactic
-      
+
 topval fold_Col : conv
-   
+
 topval member_ColT : tactic
 
 

@@ -1,5 +1,5 @@
 (*
- * Add the rewrite to the decompose tactic.
+ * Conversion between extracts and terms.
  *
  * ----------------------------------------------------------------
  *
@@ -10,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1999 Jason Hickey, Cornell University
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,24 +30,50 @@
  * jyh@cs.cornell.edu
  *)
 
-include Rewrite_type
-include Base_dtactic
+open Refiner_sig
 
-open Refiner.Refiner.Term
 open Refiner.Refiner.Refine
 
-open Tacticals
+open Tactic_boot
+open Tactic_boot.TacticInternalType
 
-(*
- * Tactics.
- *)
-val rewrite_term : term
-topval d_rewriteT : int -> tactic
+module ProofTerm (ToTerm : RefinerSig) :
+sig
+   (*
+    * Convert to a term.
+    *)
+   val to_term :
+      (string -> MLast.expr) ->         (* Parser *)
+      (MLast.expr -> tactic) ->         (* Evaluator *)
+      tactic_arg ->                     (* Goal arg *)
+      extract ->                        (* Proof *)
+      ToTerm.TermType.term
+
+   (*
+    * Convert from a term.
+    *)
+   val of_term :
+      raw_attributes ->            (* Default attributes *)
+      sentinal ->                  (* Proof checker *)
+      (string -> MLast.expr) ->    (* Parser *)
+      (MLast.expr -> tactic) ->    (* Evaluator *)
+      ToTerm.TermType.term ->      (* Argument term *)
+      extract
+
+   val convert : term -> ToTerm.TermType.term
+   val revert : ToTerm.TermType.term -> term
+
+   (*
+    * Some basic operations.
+    *)
+   val status_of_term : ToTerm.TermType.term -> lazy_status
+   val node_count_of_term : ToTerm.TermType.term -> int * int
+end
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

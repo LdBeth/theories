@@ -1,5 +1,5 @@
 (*
- * We need a rule for when rewrites are valid.
+ * Some basic tacticals.
  *
  * ----------------------------------------------------------------
  *
@@ -29,36 +29,23 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
+open Refiner.Refiner.TermType
 
-include Rewrite_type
-include Base_dtactic
+open Tactic_boot_sig
+open Tactic_boot
 
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tacticals
-open Rewrite_type
-
-(*
- * Template for the term.
- *)
-let rewrite_term = << "rewrite"{'a; 'b} >>
-
-(*
- * The dtactic operation only works on a concl.
- *)
-let d_rewriteT i p =
-   if i = 0 then
-      rewriteSequentAxiom (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_rewriteT", StringError "can't decompose a rewrite hyp"))
-
-let d_resource = Mp_resource.improve d_resource (rewrite_term, d_rewriteT)
+module Tacticals
+: TacticalsSig
+  with type tactic = TacticInternalType.tactic
+  with type tactic_arg = TacticInternalType.tactic_arg
+  with type tactic_value = TacticInternalType.tactic_value
+  with type extract = TacticInternalType.extract
+  with type arglist = TacticType.arglist
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "refiner"
+ * Caml-master: "editor.run"
  * End:
  * -*-
  *)

@@ -1,13 +1,5 @@
 (*
- * This is the lowest tactic definition layer.
- * It defines:
- *     ('arg, 'static) tactic_arg:
- *        goals (tactic arguments) with changable attributes of type 'arg
- *       and static attributes of type 'static
- *
- *     ('info, 'arg, 'static) extract:
- *        proof terms that are annotated with values of type 'info,
- *        and the 'arg, 'static attributes
+ * Print exceptions.
  *
  * ----------------------------------------------------------------
  *
@@ -18,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 1998 Jason Hickey, Cornell University
+ * Copyright (C) 1999 Jason Hickey, Cornell University
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +29,10 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
+
+open Tactic_boot_sig
+
+module TacticExn : TacticExnSig
 
 (*
  * -*-
