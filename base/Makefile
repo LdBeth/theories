@@ -6,7 +6,7 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../tactic -I ../ocaml -I $(ROOT)/lib
+INCLUDE := -I . $(SUPPORT_INCL) -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Common files
