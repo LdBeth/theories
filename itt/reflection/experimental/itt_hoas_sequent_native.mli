@@ -49,14 +49,24 @@ declare SOVar{'d}
 declare CVar{'d}
 
 (*
+ * A checking rule for a single step of a proof.
+ *)
+declare ProofRule{'ty_sequent}
+
+(*
  * A step in a proof.
  *)
 declare ProofStep{'ty_sequent}
 
 (*
- * A Logic is a list of rules.
+ * A Logic is a list of ProofRules.
  *)
 declare Logic{'rules}
+
+(*
+ * A formula is provable in a logic.
+ *)
+declare Provable{'ty_sequent; 'logic; 't}
 
 (*
  * Rewrites.
