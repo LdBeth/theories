@@ -34,7 +34,7 @@
 extends Summary
 extends Shell_theory
 
-declare it
+declare const it
 declare trivial
 
 (*
