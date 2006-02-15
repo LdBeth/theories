@@ -1,10 +1,10 @@
 (*
- * Typed core language.
+ * Typed AST.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003-2006 Mojave Group, Caltech
+ * Copyright (C) 2003-2005 Mojave Group, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,34 +25,6 @@
  * @end[license]
  *)
 extends Base_theory
-
-open Basic_tactics
-
-(************************************************************************
- * Types.
- *)
-declare typeclass TyExp -> Term
-
-declare TyTop : TyExp
-declare TyFun{'ty_domain : TyExp; 'ty_range : TyExp} : TyExp
-declare TyAll{'ty_bound : TyExp; x : TyExp. 'ty['x] : TyExp} : TyExp
-
-(************************************************************************
- * Expressions.
- *)
-declare typeclass Exp -> Term
-
-(*
- * Normal abstraction and application.
- *)
-declare Lambda{'ty_arg : TyExp; x : Exp. 'e['x] : Exp} : Exp
-declare Apply{'e1 : Exp; 'e2 : Exp} : Exp
-
-(*
- * Type abstraction and application.
- *)
-declare TyLambda{'ty_bound : TyExp; x : TyExp. 'e['x] : Exp} : Exp
-declare TyApply{'e : Exp; 'ty_arg : TyExp} : Exp
 
 (*!
  * @docoff
