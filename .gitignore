@@ -1,3 +1,4 @@
+# document listing
 theory_print.ml
 *.tex
 *.aux
@@ -10,3 +11,16 @@ theory_print.ml
 *.toc
 *.pdf
 *.ps
+# obj files
+*.a
+*.cm*
+*.o
+*.omc
+*.opt
+*.p4
+*.p4i
+*.ppo
+*.ppi
+*.prlb
+*.run
+*.top
