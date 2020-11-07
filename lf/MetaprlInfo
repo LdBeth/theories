@@ -1,0 +1,6 @@
+THEORYNAME = lf
+THEORYDESCR = Logic Framwork
+
+# Library files
+MPFILES[] =
+    lf_core
