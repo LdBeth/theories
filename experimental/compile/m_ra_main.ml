@@ -248,11 +248,12 @@ struct
 
    (*
     * Look up a node class.
-    *)
+    *
    let cenv_lookup cenv v =
       try SymbolTable.find cenv v with
          Not_found ->
             raise (Invalid_argument ("Regalloc: unclassified var: " ^ string_of_symbol v))
+   *)
 
    (************************************************************************
     * NODE OPERATIONS
@@ -285,12 +286,13 @@ struct
 
    (*
     * Test for empty.
-    *)
+    *
    let node_list_is_empty ra cl =
       let l = node_worklist ra cl in
          match !l with
             Some _ -> false
           | None -> true
+    *)
 
    (*
     * Get the head of a list.
@@ -327,6 +329,7 @@ struct
       in
          fold x (!(node_worklist ra cl))
 
+   (*
    let node_to_list ra cl =
       let rec collect = function
          Some node ->
@@ -335,6 +338,7 @@ struct
             []
       in
          collect (!(node_worklist ra cl))
+   *)
 
    (*
     * Get successor node.
@@ -672,7 +676,7 @@ struct
 
    (*
     * Iterate through the node list.
-    *)
+    *
    let move_iter ra cl f =
       let rec iter = function
          Some move ->
@@ -695,6 +699,7 @@ struct
                x
       in
          fold x (!(move_worklist ra cl))
+   *)
 
    (*
     * Create a node in a class.
@@ -749,10 +754,11 @@ struct
 
    (*
     * Reclassify all the active nodes.
-    *)
+    *
    let reclassify_active ra =
       move_iter ra MoveActive (fun move ->
             move_reclassify ra move MoveWL)
+    *)
 
    (************************************************************************
     * PRINTING
@@ -791,10 +797,11 @@ struct
                 | None ->
                      raise (Invalid_argument "Register_alloc.set_colors"))
 
+   (*
    let print_move move =
       let { move_dst = dst;
             move_src = src;
-            move_depth = depth
+            move_depth = depth; _
           } = move
       in
          printf "@[<hv 3>Move:@ dst = %a" pp_print_symbol dst.node_name;
@@ -802,6 +809,7 @@ struct
          printf ";@ src = %a" pp_print_symbol src.node_name;
          printf "; expanded = %a" pp_print_symbol (node_alias src).node_name;
          printf "@]"
+    *)
 
    (************************************************************************
     * SPILL COST
@@ -844,7 +852,7 @@ struct
             let cost =
                List.fold_left (fun sum move ->
                   let { move_dst = dst;
-                        move_depth = depth
+                        move_depth = depth; _
                       } = move
                   in
                   let cost =
@@ -875,7 +883,7 @@ struct
          else
             let { node_total_length = length;
                   node_base_cost = cost;
-                  node_degree = degree
+                  node_degree = degree; _
                 } = node
             in
             let cost =
@@ -1193,7 +1201,7 @@ struct
    let combine_moves moves1 moves2 =
       let collect (table, moves) move =
          let { move_dst = u;
-               move_src = v
+               move_src = v; _
              } = move
          in
          let u = node_alias u in
@@ -1446,8 +1454,8 @@ struct
                             u
                       in
                          (match u with
-                             { node_class = NodeColored; node_color = Some color }
-                           | { node_class = NodePrecolored; node_color = Some color }
+                             { node_class = NodeColored; node_color = Some color; _ }
+                           | { node_class = NodePrecolored; node_color = Some color; _ }
                              when SymbolSet.mem colors color ->
                                 color
                            | _ ->
@@ -1464,7 +1472,7 @@ struct
    (*
     * Assign colors to the nodes in the stack.
     *)
-   let rec assign_colors ra =
+   let assign_colors ra =
       if !debug_regalloc >= 1 then
          eprintf "Assign colors@.";
       node_iter ra NodeStack (fun node ->
@@ -1514,7 +1522,7 @@ struct
    (*
     * Assign colors to the spilled nodes.
     *)
-   let rec assign_spill_colors rclass ra spset =
+   let assign_spill_colors rclass ra spset =
       if !debug_regalloc >= 1 then
          eprintf "Assign spill colors: %d@." rclass;
 
@@ -1587,7 +1595,7 @@ struct
 
    (*
     * Add all the moves to the spset.
-    *)
+    *
    let add_moves spset ra =
       if !debug_regalloc >= 1 then
          print_ra ra;
@@ -1600,6 +1608,7 @@ struct
                      SymbolTable.add spset v (var_of_node ra node)
                 | None ->
                      raise (Invalid_argument "Register_alloc.set_colors")) spset
+    *)
 
    (************************************************************************
     * MAIN PROGRAM
@@ -1623,11 +1632,13 @@ struct
    let spilled_nodes ra =
       !(ra.ra_spilled) <> None
 
+   (*
    let move_freeze_not_done ra =
       !(ra.mv_frozen) <> None
 
    let coalesce_not_done ra =
       move_fold ra MoveCoalesced (fun i _ -> succ i) 0 > 5
+   *)
 
    (*
     * Main program performs the algorithm on page 244.

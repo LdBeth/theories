@@ -149,15 +149,16 @@ dform close_frame : parens :: "prec"[prec_fun] :: CloseFrame{frame. 'e} =
  *)
 let close_var_term      = << CloseVar{v. 'e['v]; 'a} >>
 let close_var_opname    = opname_of_term close_var_term
+(* unused
 let is_close_var_term   = is_dep1_dep0_term close_var_opname
-let dest_close_var_term = dest_dep1_dep0_term close_var_opname
+let dest_close_var_term = dest_dep1_dep0_term close_var_opname *)
 let mk_close_var_term   = mk_dep1_dep0_term close_var_opname
 
 let close_rec_term      = << CloseRec{R1, frame1. 'fields['R1; 'frame1]; R2, frame2. 'body['R2; 'frame2]; 'length; 'tuple} >>
 let close_rec_opname    = opname_of_term close_rec_term
 let is_close_rec_term   = is_dep2_dep2_dep0_dep0_term close_rec_opname
 let dest_close_rec_term = dest_dep2_dep2_dep0_dep0_term close_rec_opname
-let mk_close_rec_term   = mk_dep2_dep2_dep0_dep0_term close_rec_opname
+(* let mk_close_rec_term   = mk_dep2_dep2_dep0_dep0_term close_rec_opname *)
 
 doc <:doc<
    @modsubsection{Phase 1}

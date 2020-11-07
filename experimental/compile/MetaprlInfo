@@ -1,2 +1,33 @@
-THEORYNAME = compile
-THEORYDESCR = compile
+THEORYNAME = m
+THEORYDESCR = The experimental programming language M
+
+PRINT_THEORIES[] =
+    m_doc_intro
+    m_doc_parsing
+    m_doc_ir
+    m_doc_cps
+    m_doc_closure
+    m_doc_opt
+    m_doc_x86_asm
+    m_doc_x86_codegen
+    m_doc_x86_regalloc
+    m_doc_x86_opt
+    m_doc_summary
+    m_doc_intro_fdl
+    m_doc_parsing
+    m_doc_ir
+    m_doc_cps
+    m_doc_closure
+    m_doc_opt
+    m_doc_summary_fdl
+    m_ir
+    m_cps
+    m_closure
+    m_prog
+    m_dead
+    m_inline
+    m_reserve
+    m_x86_asm
+    m_x86_codegen
+    m_x86_opt
+    m_x86_spill

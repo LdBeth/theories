@@ -32,7 +32,6 @@ extends M_x86_inst_type
 open Lm_symbol
 
 open Term_sig
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
@@ -371,8 +370,10 @@ let dest_operand_aux dest_reg t =
 let dest_operand_term op =
    dest_operand_aux dest_var op
 
+(*
 let dest_operand_spill op =
    dest_operand_aux dest_spill_reg op
+*)
 
 (*
  * Make sure it is a memory operand.
@@ -771,7 +772,7 @@ let mk_operand_aux mk_reg op =
              { bvars = []; bterm = mk_reg v2 }]
 
 let mk_operand_term = mk_operand_aux mk_var_term
-let mk_operand_spill = mk_operand_aux mk_spill_reg_term
+(* let mk_operand_spill = mk_operand_aux mk_spill_reg_term *)
 
 let mk_cc_term cc =
    mk_string_term cc_opname (mk_cc cc)

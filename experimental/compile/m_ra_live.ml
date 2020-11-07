@@ -52,10 +52,10 @@ sig
    val to_set : t -> SymbolSet.t
 
    val find : t -> symbol -> int
-   val remove : t -> symbol -> t
+   (* val remove : t -> symbol -> t *)
 
    val iter : (symbol -> int -> unit) -> t -> unit
-   val fold : ('a -> symbol -> int -> 'a) -> 'a -> t -> 'a
+   (* val fold : ('a -> symbol -> int -> 'a) -> 'a -> t -> 'a *)
 end
 
 module LiveSet : LiveSetSig =
@@ -101,9 +101,9 @@ struct
             SymbolSet.add set v) SymbolSet.empty live
 
    let iter = SymbolTable.iter
-   let fold = SymbolTable.fold
+   (* let fold = SymbolTable.fold *)
    let find = SymbolTable.find
-   let remove = SymbolTable.remove
+   (* let remove = SymbolTable.remove *)
 end
 
 (*
@@ -182,7 +182,7 @@ struct
       let rec collect depth defs dtable code =
          let { code_dst = defs';
                code_class = cclass;
-               code_rest = rest
+               code_rest = rest; _
              } = code
          in
          let defs = SymbolSet.union defs defs' in
@@ -206,7 +206,7 @@ struct
       let rec collect uses'' code =
          let { code_dst = defs;
                code_src = uses;
-               code_rest = rest
+               code_rest = rest; _
              } = code
         in
         let uses' = List.fold_left collect LiveSet.empty rest in
@@ -259,14 +259,14 @@ struct
        * Compute the dataflow assignment for a single node.
        * Returns true iff the live sets have changed.
        *)
-      let rec update_block updated benv label =
+      let update_block updated benv label =
          let block =
             try SymbolTable.find benv label with
                Not_found -> raise (Invalid_argument "dataflow")
          in
          let { block_in = live;
                block_uses = uses;
-               block_defs = defs
+               block_defs = defs; _
              } = block
          in
          let live' =
@@ -321,7 +321,7 @@ struct
          if depth < len then
             defs
          else
-            let defs' = Array.create (succ depth) 0 in
+            let defs' = Array.make (succ depth) 0 in
                Array.blit defs 0 defs' 0 len;
                defs'
       in
@@ -341,7 +341,7 @@ struct
          if depth < len then
             defs
          else
-            let defs' = Array.create (succ depth) 0 in
+            let defs' = Array.make (succ depth) 0 in
                Array.blit defs 0 defs' 0 len;
                set stats defs';
                defs'
@@ -402,7 +402,7 @@ struct
     * New move stats.
     *)
    let move_new_stats depth =
-      let depth' = Array.create (succ depth) 0 in
+      let depth' = Array.make (succ depth) 0 in
          depth'.(depth) <- 1;
          { move_depth = depth' }
 

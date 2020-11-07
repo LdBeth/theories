@@ -32,7 +32,6 @@ open Lm_printf
 open Lm_symbol
 
 open Term_sig
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 

@@ -104,6 +104,7 @@ let fp4    = Lm_symbol.add "fp4"
 let fp5    = Lm_symbol.add "fp5"
 let iflags = Lm_symbol.add "iflags"
 let fflags = Lm_symbol.add "fflags"
+(* unused
 let fpmap  = [fp0, 0; fp1, 1; fp2, 2; fp3, 3; fp4, 4; fp5, 5]
 let mmx0   = Lm_symbol.add "mmx0"
 let mmx1   = Lm_symbol.add "mmx1"
@@ -113,6 +114,7 @@ let mmx4   = Lm_symbol.add "mmx4"
 let mmx5   = Lm_symbol.add "mmx5"
 let mmx6   = Lm_symbol.add "mmx6"
 let mmx7   = Lm_symbol.add "mmx7"
+*)
 
 (*
  * Register classes.
@@ -184,6 +186,7 @@ let pp_print_operand buf op =
          in
             pp_print_string buf s
 
+(* unused
 let rec pp_print_operands buf ops =
    match ops with
       [op] ->
@@ -192,6 +195,7 @@ let rec pp_print_operands buf ops =
          ()
     | op :: ops ->
          fprintf buf "%a, %a" pp_print_operand op pp_print_operands ops
+*)
 
 let pp_print_operand_byte out op =
    match op with
@@ -201,6 +205,7 @@ let pp_print_operand_byte out op =
     | Register r when r = edx -> fprintf out "%%dl"
     | _                       -> pp_print_operand out op
 
+(*
 let pp_print_operand_word out op =
    match op with
       Register r when r = eax -> fprintf out "%%ax"
@@ -210,6 +215,7 @@ let pp_print_operand_word out op =
     | Register r when r = esi -> fprintf out "%%si"
     | Register r when r = edi -> fprintf out "%%di"
     | _                       -> pp_print_operand out op
+*)
 
 (*
  * Print out an instruction.
@@ -456,7 +462,7 @@ let rec pp_print_live out
       live_out = live;
       live_class = cclass;
       live_inst = inst;
-      live_rest = rest
+      live_rest = rest; _
     } =
    let pp_print_var_set vars =
       ignore (SymbolSet.fold (fun flag v ->
@@ -538,7 +544,7 @@ let rename_find table v =
 
 (*
  * Flatten the rename table.
- *)
+ *
 let rename_flatten table =
    let rec lookup v =
       try lookup (SymbolTable.find table v) with
@@ -546,6 +552,7 @@ let rename_flatten table =
             v
    in
       SymbolTable.map lookup table
+*)
 
 (*
  * Rename the shift operand if it is a register.
@@ -681,8 +688,10 @@ let vars_operand vars op =
          let vars = vars_var vars r2 int_reg_class in
             vars
 
+(*
 let vars_operands vars operands =
    List.fold_left vars_operand vars operands
+*)
 
 let vars_operand_mov vars src dst =
    let vars = vars_operand vars src in
@@ -838,6 +847,7 @@ let src_regs src regs =
     | MemRegRegOffMul (r1, r2, _, _) ->
          SymbolSet.add (SymbolSet.add regs r1) r2
 
+(*
 let src_regs_list srcs regs =
    List.fold_left (fun regs src ->
          src_regs src regs) regs srcs
@@ -856,6 +866,7 @@ let dst_regs rename dst regs =
     | SpillMemory _
     | ContextRegister _ ->
          regs
+*)
 
 (* get_operands_param
    We pretend that this instruction defines the var.  *)
@@ -1119,7 +1130,7 @@ let rec get_operands inst =
 let rec filter_code_operands filter code =
    let { code_src = src;
          code_dst = dst;
-         code_rest = rest
+         code_rest = rest; _
        } = code
    in
       { code with code_src = filter src;
@@ -1217,7 +1228,7 @@ struct
    let min_spill_length = 5
 
    (* Basic blocks *)
-   let block_label { block_label = label } =
+   let block_label { block_label = label; _ } =
       label
 
    let block_code = block_code
