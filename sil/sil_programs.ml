@@ -113,7 +113,7 @@ dform if_df : parens :: "prec"["prec_if"] :: "if"{'e1; 'e2; 'e3; 'e4} =
    szone pushm[0] pushm[3] keyword["if "] slot{'e1} keyword[" = "] slot{'e2} keyword[" then"] hspace
    slot{'e3} popm hspace
    pushm[3] keyword["else"] hspace
-   slot{'e4} popm popm
+   slot{'e4} popm popm ezone
 
 (*
  * Disjoint union.

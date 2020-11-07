@@ -41,6 +41,8 @@ extends Sil_itt_state
 open Basic_tactics
 open Base_rewrite
 
+module TermMan = Refiner.Refiner.TermMan
+
 open Sil_sos
 
 (************************************************************************

@@ -1,3 +1,6 @@
+THEORYNAME = sil
+THEORYDESCR = Simple imperative language
+
 THEORY_DEPS[] +=
     itt/core
 
