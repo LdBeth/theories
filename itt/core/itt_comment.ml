@@ -170,12 +170,12 @@ dform math_bnot_df1 : mode[tex] :: math_bnot{'a} =
    izone `"}" ezone
 
 dform math_if_df1 : mode[tex] :: math_if{'a; 'b; 'c} =
-   izone `"\\mathop{\\bf if}" ezone
+   pushm[0] szone push_indent izone `"\\mathop{\\bf if}" ezone
    szone{'a}
-   izone `"\\mathrel{\\bf then}" ezone
-   szone{'b}
-   izone `"\\mathrel{\\bf else}" ezone
-   szone{'c}
+   izone `"\\mathrel{\\bf then}" ezone hspace
+   szone{'b} popm hspace
+   push_indent izone `"\\mathrel{\\bf else}" ezone hspace
+   szone{'c} popm ezone popm
 
 (************************************************
  * Normal mode.
