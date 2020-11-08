@@ -65,6 +65,7 @@ open Itt_squash
 
 doc <:doc< @terms >>
 declare const void
+define unfold_any : any{'x} <--> it
 doc docoff
 
 let void_term = << void >>
@@ -78,6 +79,7 @@ let top_term = mk_simple_term top_opname []
  ************************************************************************)
 
 dform void_df1 : except_mode[src] :: void = `"Void"
+dform any_df1 : except_mode[src] :: any{'x} = `"any " slot{'x}
 
 (************************************************************************
  * RULES                                                                *
@@ -106,11 +108,12 @@ doc <:doc<
    @modsubsection{Elimination}
 
    Since the <<void>> type is empty, induction over the
-   <<void>> type produces no cases.
+   <<void>> type produces no cases. And <<any{'x}>> is used for
+   witness.
 >>
 prim voidElimination {| elim []; squash; nth_hyp |} 'H :
    sequent { <H>; x: void; <J['x]> >- 'C['x] } =
-   it
+   any{'x}
 
 doc <:doc<
    @modsubsection{Subtyping}
