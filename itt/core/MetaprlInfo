@@ -8,6 +8,7 @@ MPFILES[] =
    itt_equal
    itt_struct
    itt_squiggle
+   itt_base
    itt_pairwise
    itt_image
    itt_squash
