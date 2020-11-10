@@ -1,4 +1,5 @@
 doc <:doc<
+   @spelling{ILC}
    @theory{ILC: A Foundation for Automated Reasoning About Pointer Programs}
    @module[Ilc_core]
 
@@ -55,7 +56,7 @@ doc <:doc<
    linear formulas with a bang or a circle on top).  << DataType >> is the
    meta-type for the ``base'' types of the PL. We will also use the << Term >> meta-type
    of the type theory expressions. <<TyScope>> is the meta-meta-type of meta-types that may
-   appear in the ilc non-linear contexts.
+   appear in the @tt[ilc] non-linear contexts.
 
    Note that the meta-types are only here to help detect typos in the axiom and theorem statements,
    and they are not part of the formal specification of the ILC calculus (and all the types and type
@@ -90,7 +91,7 @@ declare typeclass LinearSeq -> Dform
 
 doc <:doc<
    @modsubsection{Judgments}
-   The @tt[ilc] sequents may have terms of any of the TyScope types in its hypotheses and its conclusion
+   The @tt[ilc] sequents may have terms of any of the <<TyScope>> types in its hypotheses and its conclusion
    must be a <<LinearSeq>> sequent. The resulting sequent will have the meta-type <<Judgment>> of ``top-level''
    @MetaPRL judgments.
 

@@ -10,8 +10,8 @@ MPFILES[] =
     ilc_term
     ilc_extend
     ilc_listtest1
-    ilc_test
+    # ilc_test
     ilc_listtest
     ilc_mergesort
-    ilc_longmergesort
+    # ilc_longmergesort
 
