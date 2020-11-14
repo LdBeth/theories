@@ -121,10 +121,10 @@ let gen_bench ~name ~seed ~nrules ~nineq ~nvars ~intrange ~maxdepth =
 	done;
 	flush co
 
+(* XXX: HACK: should be intergrate into gen_bench *)
 let gen_smt ~name ~seed ~nrules ~nineq ~nvars ~intrange ~maxdepth =
 	Random.init seed;
 	let ct = open_out name in
-	(* fprintf co "open Itt_int_test\n\n"; *)
 	for i=0 to nrules - 1 do
 		gen_rule_smt ct i nineq nvars intrange maxdepth
 	done;
@@ -134,7 +134,7 @@ let _ = gen_bench ~name:"itt_int_bench.ml"
 	~seed:0 ~nrules:10 ~nineq:10 ~nvars:5 ~intrange:10 ~maxdepth:3
 
 let _ = gen_smt ~name:"itt_int_bench.smt"
-	~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:3
+	~seed:0 ~nrules:10 ~nineq:10 ~nvars:5 ~intrange:10 ~maxdepth:3
 
 let _ = gen_bench ~name:"itt_int_bench2.ml"
 	~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
