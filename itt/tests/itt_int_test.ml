@@ -147,7 +147,7 @@ interactive test12 :
 
 interactive test13 :
    sequent { <H> >- 'a in int } -->
-   sequent { <H>; 'a >= 0;
+   sequent { <H>; 'a > 0;
                   1 >= 5 *@ 'a
                   >- "assert"{bfalse} }
 

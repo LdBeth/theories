@@ -180,6 +180,7 @@ interactive barber 'barber 'barber bind{x,y.'shaves['x;'y]} :
 
 
 interactive fv1 bind{x.'A['x]} 'x 'y :
+   sequent { >- "type"{'A['x]} } -->
    sequent { >- 'A['x] => 'A['y] }
 
 interactive fv2 bind{x.'A['x]} 'a 'b 'f :
@@ -188,6 +189,9 @@ interactive fv2 bind{x.'A['x]} 'a 'b 'f :
    sequent { >- all x:'T. 'A['x,'b] => 'A['f('a),'b] }
 
 interactive fv3 bind{x.'A['x]} 'a 'b 'f :
+   sequent { x: 'T >- "type"{'A['x,'a]} } -->
+   sequent { x: 'T >- "type"{'A['x,'a]} } -->
+   sequent { >- 'f('a) in 'T } -->
    sequent { >- all x:'T. 'A['x,'b] => 'A['f('a),'a] }  (* INVALID *)
 
 
@@ -275,6 +279,16 @@ interactive fo_n3 :
 
 
 interactive fo_n4 : (* takes really long *)
+   sequent { >- "type"{'T} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'B1} } -->
+   sequent { >- "type"{'B2} } -->
+   sequent { >- "type"{'B3} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'A1['x]} } -->
+   sequent { x: 'T >- "type"{'A2['x]} } -->
+   sequent { x: 'T >- "type"{'A3['x]} } -->
+   sequent { x: 'T >- "type"{'A4['x]} } -->
    sequent { >- (all w:'T. 'A4['w]) & (all x:'T. (('B or 'A['x]) or 'B)) & "not"{('B & (all y:'T. 'A1['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B2 or 'A2['x]) or 'B2)) & "not"{('B2 & (all y:'T. 'A3['y]))} & (all x:'T. (('B3 or 'A3['x]) or 'B3)) & "not"{('B3 & (all y:'T. 'A4['y]))} => all z:'T. 'A['z] }
 
 
