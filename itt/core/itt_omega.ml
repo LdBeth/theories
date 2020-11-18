@@ -865,7 +865,7 @@ struct
 		type t = Ring.ring array
 
 		let equal a1 a2 =
-         Lm_array_util.for_all2 Ring.equal a1 a2
+         Array.for_all2 Ring.equal a1 a2
 
       (*
        * Since Lm.num has adopted hash safe Zarith, this should work fine.
