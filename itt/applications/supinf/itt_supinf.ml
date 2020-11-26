@@ -158,7 +158,7 @@ struct
       Num (a,b) -> mk_rat_term (mk_number_term a) (mk_number_term b)
 (*    | _ -> raise (Invalid_argument "Infinities have no projections to terms")*)
     | PlusInfinity -> mk_rat_term (mk_number_term num1) (mk_number_term num0)
-    | MinusInfinity -> mk_rat_term (mk_number_term (sub_num num0 num1)) (mk_number_term num0)
+    | MinusInfinity -> mk_rat_term (mk_number_term (num_of_int (-1))) (mk_number_term num0)
 
 
    let add_term = mk_add_rat_term

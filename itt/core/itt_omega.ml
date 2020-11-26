@@ -787,17 +787,15 @@ module IntRing =
 struct
    type ring = num
 
-   let num0 = zero_num
-   let num1 = one_num
-   let ringUnit = num1
-   let ringZero = num0
+   let ringUnit = one_num
+   let ringZero = zero_num
 
    let print out a =
       fprintf out "(%s)" (string_of_num a)
 
-   let isNegative = gt_num num0
+   let isNegative = is_neg
 
-   let isPositive = lt_num num0
+   let isPositive = is_pos
 
    let abs = abs_num
    let mul = mult_num
@@ -808,10 +806,6 @@ struct
    (* Euclidean division and remainder. *)
    let rem = erem_num
    let div = ediv_num
-
-(* unused
-	let sign_num a = num_of_int (compare_num a num0)
-*)
 
    let compare = compare_num
    let equal = eq_num
@@ -1229,10 +1223,10 @@ let print_constrs constrs =
 
 let var_bounds (old_upper, old_lower) f v =
 	let c = AF.coef f (succ v) in
-	if lt_num c num0 then
+	if is_neg c then
 		(true, old_lower)
 	else
-		if gt_num c num0 then
+		if is_pos c then
 			(old_upper, true)
 		else
 			(old_upper, old_lower)
@@ -1451,7 +1445,7 @@ let omegaCoreT info hyp_num hyp_length used_hyps tree f = funT (fun p ->
 			omegaAuxT info hyp_pos tree
 	 | Mul _ | MulAndWeaken _ ->
 			let tm = AF.term_of info f in
-			assertT (mk_ge_term tm (term_of num0))
+			assertT (mk_ge_term tm (term_of zero_num))
 			thenLT [omegaAuxT info hyp_pos tree; rw ge_normC (-1)]
 	 | Solve (v,c1,t1,l,c2,t2,u) ->
 			let c1t = term_of c1 in
@@ -1459,7 +1453,7 @@ let omegaCoreT info hyp_num hyp_length used_hyps tree f = funT (fun p ->
 			assertT
 				(mk_ge_term
 					(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
-					(mk_number_term num0))
+					(mk_number_term zero_num))
 			thenLT [omegaAuxT info hyp_pos tree; rw ge_normC (-1)]
 )
 
