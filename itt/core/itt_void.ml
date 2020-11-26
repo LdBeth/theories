@@ -65,6 +65,12 @@ open Itt_squash
 
 doc <:doc< @terms >>
 declare const void
+
+doc <:doc<
+   <<any{'a}>> can be a member of any type when <<'a>> is instantiated
+   by a member of <<void>>. It can be any term but currently default to
+   the simplest term <<it>>.
+>>
 define unfold_any : any{'x} <--> it
 doc docoff
 

@@ -1,5 +1,5 @@
 (*
- * PArameterized recursive type.
+ * Parameterized recursive type.
  *
  * ----------------------------------------------------------------
  *
