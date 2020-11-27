@@ -113,8 +113,8 @@ dform next_loop_df3 : next_loop{'index; 'l} =
    `"L{" slot{'l} `"+" df_length{'index} `"}"
 
 dform ifthenelse_df : parens :: "prec"[prec_if_eq_label] :: if_eq_label{'e1; 'e2; 'e3; 'e4} =
-   szone pushm[0] pushm[3] keyword["if "] szone{'e1} `" =l" hspace slot{'e2} keyword[" then"] hspace
-   szone{'e3} popm hspace
+   szone pushm[0] pushm[3] keyword["if "] szone{'e1} `" =" Mpsymbols!subl hspace slot{'e2}
+   keyword[" then"] hspace szone{'e3} popm hspace
    pushm[3] keyword["else"] hspace szone{'e4} popm popm ezone
 
 (*

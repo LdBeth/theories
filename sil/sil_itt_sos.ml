@@ -347,7 +347,7 @@ interactive add_eval 's2 :
 interactive sub_eval 's2 :
    [main] sequent { <H> >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
    [main] sequent { <H> >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
-   sequent { <H> >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
+   sequent { <H> >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_diff[i:n, j:n]; 's3}} }
 
 interactive if_eval (number[i:n]) 's2 (number[j:n]) 's3 :
    [main] sequent { <H> >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->

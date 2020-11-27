@@ -64,10 +64,10 @@ prec prec_le_label
 prec prec_le_label < prec_eq_label
 
 dform eq_label_df : parens :: "prec"[prec_eq_label] :: eq_label{'l1; 'l2} =
-   slot{'l1} `"=l " slot{'l2}
+   slot{'l1} `" =" Mpsymbols!subl `" " slot{'l2}
 
 dform le_label_df : parens :: "prec"[prec_le_label] :: le_label{'l1; 'l2} =
-   slot{'l1} Mpsymbols!le `"l " slot{'l2}
+   slot{'l1} `" " Mpsymbols!le Mpsymbols!subl `" " slot{'l2}
 
 dform empty_df : empty =
    `"{}"
