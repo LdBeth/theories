@@ -1,0 +1,60 @@
+Rule/Rewrite unfold_eval_lists: Prim
+Rule/Rewrite unfold_cmp_lists: Prim
+Rule/Rewrite unfold_add_mpoly: Prim
+Rule/Rewrite reduce_add_mpolyNilAny: No proof
+Rule/Rewrite reduce_add_mpolyAnyNil: No proof
+Rule/Rewrite unfold_combine_lists: Prim
+Rule/Rewrite reduce_mul_monomNilAny: No proof
+Rule/Rewrite reduce_mul_monomAnyNil: No proof
+Rule/Rewrite reduce_mpoly_ofTermAdd: No proof
+Rule/Rewrite reduce_mpoly_ofTermMul: No proof
+Rule/Rewrite reduce_mpoly_ofTermVar: No proof
+Rule/Rewrite reduce_mpoly_ofTermConst: No proof
+Rule/Rewrite mpolyTerm_wf: No proof
+Rule/Rewrite addTerm_wf: No proof
+Rule/Rewrite mulTerm_wf: No proof
+Rule/Rewrite constTerm_wf: No proof
+Rule/Rewrite varTerm_wf: No proof
+Rule/Rewrite mpoly_ofTerm_wf: No proof
+Rule/Rewrite reduce_eval_mpolyTermAdd: No proof
+Rule/Rewrite reduce_eval_mpolyTermMul: No proof
+Rule/Rewrite reduce_eval_mpolyTermConst: No proof
+Rule/Rewrite reduce_eval_mpolyTermVar: No proof
+Rule/Rewrite eval_standardizeElim: No proof
+Rule/Rewrite test4: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test5: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test6: Proof: 0 by rw mpoly_evalC 0 ttca
+                             << Goal >>
+                           Close 0
+Rule/Rewrite test7: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test8: Proof: 0 by rw mpoly_evalC 0 ttca
+                             << Goal >>
+                           Close 0
+Rule/Rewrite test9: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test11: Proof: 0 by rw mpoly_evalC 0 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test12: Proof: 0 by rw mpoly_evalC 0 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test13: Proof: 0 by rw mpoly_evalC 0 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test14: Proof: 0 by rw mpoly_evalC 2 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test15:
+   Proof:
+      0 by
+      stdT <<unitringCE[i:l]>> <<Z>> [<<'x>>;<<'y>>] 0 taa thenAT repeatT (rw reduceC 0) ttca
+        << Goal >>
+        << Goal >>
+      Close 0

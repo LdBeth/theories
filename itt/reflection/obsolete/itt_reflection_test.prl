@@ -1,0 +1,14 @@
+Rule/Rewrite wellformed_bterm_example:
+   Proof: 0 by reduceT ttca
+            No Subgoals
+          Close 0
+Rule/Rewrite isbterm_wf1: Proof: 0 by reduceT ttca
+                                   No Subgoals
+                                 Close 0
+Rule/Rewrite test_subterms:
+   Proof: 0 by rwh Itt_reflection.reduce_subterms 0 ttca
+            No Subgoals
+          Close 0
+Rule/Rewrite isbterm_example: Proof: 0 by reduceT ttca
+                                       No Subgoals
+                                     Close 0

@@ -1,0 +1,45 @@
+Rule/Rewrite dualSubst:
+   Proof:
+      0 by hypSubstT 4 2 thenMT hypSubstT 5 2 thenWT reduceT ttca
+        No Subgoals
+      Close 0
+Rule/Rewrite fold_add: No proof
+Rule/Rewrite fold_mul: No proof
+Rule/Rewrite test: Proof: 0 by arithAT
+                            No Subgoals
+                          Close 0
+Rule/Rewrite test2: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test3: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test4: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test5: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test6: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test7: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test8: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test9: Proof: 0 by arithAT
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test10: Proof: 0 by arithAT
+                              No Subgoals
+                            Close 0
+Rule/Rewrite testn:
+   Proof:
+      0 by
+      genT [<<'v>>;<<'v1>>;<<'v2>>;<<'v3>>;<<'v4>>;<<'v5>>;<<'v6>>;<<'v7>>;<<'v8>>;<<'v9>>] 0 10 10 10 3 taa thenMT thinT 11
+        0.1 by arithAT
+          No Subgoals
+        Close 0.1
+      Close 0

@@ -1,0 +1,21 @@
+Rule/Rewrite sum_same_products_rat1_rw: No proof
+Rule/Rewrite sum_same_products_rat2_rw: No proof
+Rule/Rewrite sum_same_products_rat3_rw: No proof
+Rule/Rewrite sum_same_products_rat4_rw: No proof
+Rule/Rewrite add_rat_BubblePrimitive_rw: No proof
+Rule/Rewrite mul_rat_BubblePrimitive_rw: No proof
+Rule/Rewrite test1: Proof: 0 by rw normalizeC 0 taa
+                             << Goal >>
+                           Close 0
+Rule/Rewrite testn:
+   Proof:
+      0 by
+      genT [<<'v>>;<<'v1>>;<<'v2>>;<<'v3>>;<<'v4>>;<<'v5>>;<<'v6>>;<<'v7>>;<<'v8>>;<<'v9>>] 0 10 10 10 3 taa thenMT thinT 11
+        0.1 by int2ratT taa
+          0.1.1 by rwAll normalizeC taa
+            << Goal >>
+            ...
+            << Goal >>
+          Close 0.1.1
+        Close 0.1
+      Close 0

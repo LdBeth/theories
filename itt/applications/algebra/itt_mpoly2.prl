@@ -1,0 +1,242 @@
+Rule/Rewrite list_n_wf: No proof
+Rule/Rewrite list_n_member: No proof
+Rule/Rewrite reduce_list_ind2Nil: Prim
+Rule/Rewrite reduce_list_ind2Cons: Prim
+Rule/Rewrite reduce_add_monom: Prim
+Rule/Rewrite reduce_add_mpolyNil: Prim
+Rule/Rewrite reduce_add_mpolyCons: Prim
+Rule/Rewrite reduce_mul_monom: Prim
+Rule/Rewrite reduce_eval_monom: Prim
+Rule/Rewrite reduce_cmp_lexi: Prim
+Rule/Rewrite reduce_eq_monom: Prim
+Rule/Rewrite monom_wf: Proof: 0 by byDefT unfold_monom
+                                No Subgoals
+                              Close 0
+Rule/Rewrite mpoly_wf: Proof: 0 by byDefT unfold_mpoly
+                                No Subgoals
+                              Close 0
+Rule/Rewrite nil_in_mpoly: No proof
+Rule/Rewrite cons_in_mpoly:
+   Proof: 0 by byDefT unfold_mpoly
+            No Subgoals
+          Close 0
+Rule/Rewrite zero_mpoly_wf: No proof
+Rule/Rewrite add_mpoly_wf:
+   Proof:
+      0 by genAssumT [1;2]
+        0.1 by rwh unfold_mpoly 2 thenT dT 2
+          0.1.1 by byDefT reduce_add_mpolyNil
+            No Subgoals
+          Close 0.1.1
+          0.1.2 by byDefT reduce_add_mpolyCons
+            No Subgoals
+          0.1.2 Has Xtra: 0.1.2.1 by withT <<cons{'u;'v2}>> (dT 4) ttca
+                            No Subgoals
+                          Close 0.1.2.1
+        Close 0.1
+      Close 0
+Rule/Rewrite mul_monom_wf: No proof
+Rule/Rewrite mul_monom_mpoly_wf: No proof
+Rule/Rewrite mul_mpoly_wf:
+   Proof:
+      0 by genAssumT [1;2]
+        0.1 by rwh unfold_mpoly 2 thenT dT 2
+          << Goal >>
+          0.1.2 by dT 0 twa
+            0.1.2.1 by
+            rwh unfold_mul_mpoly 0 thenT rwh unfold_mul_monom_mpoly 0 thenT rw reduceC 0 ta
+              0.1.2.1.1 by
+              rwh unfold_mpoly 5 thenT dT 5 thenMT rw reduceC 0 taa
+                << Goal >>
+                0.1.2.1.1.2 by dT 0 ttca
+                  No Subgoals
+                Close 0.1.2.1.1.2
+              Close 0.1.2.1.1
+              << Goal >>
+            Close 0.1.2.1
+          Close 0.1.2
+        Close 0.1
+      Close 0
+Rule/Rewrite const_mpoly_wf: No proof
+Rule/Rewrite id_mpoly_wf: No proof
+Rule/Rewrite eval_standardizeIntro: No proof
+Rule/Rewrite eval_standardizeAssert: No proof
+Rule/Rewrite eval_standardizeElim: No proof
+Rule/Rewrite mpolyTerm_wf:
+   Proof:
+      0 by byDefT unfold_mpolyTerm
+        << Goal >>
+      0 Has Xtra: 0.2 by dT 2 thenT dT 2 thenT reduceT ttca
+                    No Subgoals
+                  Close 0.2
+Rule/Rewrite addTerm_wf:
+   Proof:
+      0 by
+      byDefsT [unfold_addTerm; unfold_addOp; unfold_mpolyTerm] thenT rw reduceC 0 taa
+        0.1 by rw reduceC 2 thenT dT 2 thenT rw reduceC 0 ttca
+          No Subgoals
+        Close 0.1
+        0.2 by dT 2 thenT dT 2 thenT reduceT ttca
+          No Subgoals
+        Close 0.2
+      Close 0
+Rule/Rewrite mulTerm_wf:
+   Proof:
+      0 by
+      byDefsT [unfold_mulTerm; unfold_mulOp; unfold_mpolyTerm] thenT reduceT taa thenT repeatT (dT (-1)) thenT reduceT ttca
+        No Subgoals
+      Close 0
+Rule/Rewrite constTerm_wf:
+   Proof:
+      0 by
+      byDefsT [unfold_constTerm; unfold_constLeaf; unfold_mpolyTerm] thenT reduceT taa
+        0.1 by dT 2 thenT dT 2 thenT reduceT ttca
+          No Subgoals
+        Close 0.1
+      Close 0
+Rule/Rewrite varTerm_wf:
+   Proof:
+      0 by
+      byDefsT [unfold_varTerm; unfold_varLeaf; unfold_mpolyTerm] thenT reduceT taa
+        0.1 by dT 2 thenT dT 2 thenT reduceT ttca
+          No Subgoals
+        Close 0.1
+      Close 0
+Rule/Rewrite mpoly_ofTerm_wf: No proof
+Rule/Rewrite reduce_eval_mpolyTermAdd:
+   Proof:
+      0 by rw (addrC [1] unfold_eval_mpolyTerm) 0
+        0.1 by rwh unfold_addTerm 0
+          0.1.1 by rwh unfold_addOp 0 thenT reduceT
+            0.1.1.1 by
+            rwh unfold_rightOperand 0 thenT rwh unfold_leftOperand 0 thenT reduceT
+              0.1.1.1.1 by
+              rwh unfold_eval_mpolyTerm 0 thenT rwh unfold_leftOperand 0 thenT rwh unfold_rightOperand 0 ttca
+                No Subgoals
+              Close 0.1.1.1.1
+            Close 0.1.1.1
+          Close 0.1.1
+        Close 0.1
+      Close 0
+Rule/Rewrite reduce_eval_mpolyTermMul:
+   Proof:
+      0 by rw (addrC [1] unfold_eval_mpolyTerm) 0
+        0.1 by rwh unfold_mulTerm 0
+          0.1.1 by rwh unfold_mulOp 0 thenT reduceT
+            0.1.1.1 by
+            rwh unfold_rightOperand 0 thenT rwh unfold_leftOperand 0 thenT reduceT
+              0.1.1.1.1 by
+              rwh unfold_eval_mpolyTerm 0 thenT rwh unfold_leftOperand 0 thenT rwh unfold_rightOperand 0 ttca
+                No Subgoals
+              Close 0.1.1.1.1
+            Close 0.1.1.1
+          Close 0.1.1
+        Close 0.1
+      0 Has Xtra: 0.2 by
+                  rwh (foldC <<leftOperand>> unfold_leftOperand) 0 thenT rwh (foldC <<rightOperand>> unfold_rightOperand) 0
+                    0.2.1 by
+                    rwh (foldC <<eval_mpolyTerm{'x; 'vals; 'R}>> unfold_eval_mpolyTerm) 0
+                      << Goal >>
+                    Close 0.2.1
+                  Close 0.2
+Rule/Rewrite reduce_eval_mpolyTermConst:
+   Proof:
+      0 by
+      byDefsT [unfold_eval_mpolyTerm; unfold_constTerm; unfold_constLeaf] thenT reduceT ttca
+        No Subgoals
+      Close 0
+Rule/Rewrite reduce_eval_mpolyTermVar:
+   Proof:
+      0 by
+      byDefsT [unfold_eval_mpolyTerm; unfold_varTerm; unfold_varLeaf] thenT reduceT ttca
+        No Subgoals
+      Close 0
+Rule/Rewrite reduce_mpoly_ofTermAdd:
+   Proof:
+      0 by rw (addrC [1] unfold_mpoly_ofTerm) 0
+        0.1 by byDefsT [unfold_addTerm; unfold_addOp] thenT reduceT
+          0.1.1 by
+          rw (addrC [1; 1; 1] (higherC unfold_leftOperand)) 0 thenT reduceT
+            0.1.1.1 by
+            rw (addrC [1; 2; 1] (higherC unfold_rightOperand)) 0 thenT reduceT
+              0.1.1.1.1 by rwh unfold_mpoly_ofTerm 0 thenT reduceT ttca
+                No Subgoals
+              Close 0.1.1.1.1
+            Close 0.1.1.1
+          Close 0.1.1
+        Close 0.1
+      Close 0
+Rule/Rewrite reduce_mpoly_ofTermMul:
+   Proof:
+      0 by rw (addrC [1] unfold_mpoly_ofTerm) 0
+        0.1 by byDefsT [unfold_mulTerm; unfold_mulOp] thenT reduceT
+          0.1.1 by rw (addrC [1; 1; 1; 1] unfold_leftOperand) 0
+            0.1.1.1 by rw (addrC [1; 2; 1; 1] unfold_rightOperand) 0
+              0.1.1.1.1 by rwh unfold_mpoly_ofTerm 0 thenT reduceT ttca
+                No Subgoals
+              Close 0.1.1.1.1
+            Close 0.1.1.1
+          Close 0.1.1
+        Close 0.1
+      Close 0
+Rule/Rewrite reduce_mpoly_ofTermConst:
+   Proof:
+      0 by
+      byDefsT [unfold_mpoly_ofTerm; unfold_constTerm; unfold_constLeaf] thenT reduceT ttca
+        No Subgoals
+      Close 0
+Rule/Rewrite reduce_mpoly_ofTermVar:
+   Proof:
+      0 by
+      byDefsT [unfold_mpoly_ofTerm; unfold_varTerm; unfold_varLeaf] thenT reduceT ttca
+        No Subgoals
+      Close 0
+Rule/Rewrite mpolyTerm2mpoly: No proof
+Rule/Rewrite test4: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test5: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test6: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test7: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test8: Proof: 0 by rw mpoly_evalC 0 ttca
+                             << Goal >>
+                           Close 0
+Rule/Rewrite test9: Proof: 0 by rw mpoly_evalC 0 ttca
+                             No Subgoals
+                           Close 0
+Rule/Rewrite test11: Proof: 0 by rw mpoly_evalC 0 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test12: Proof: 0 by rw mpoly_evalC 0 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test13: Proof: 0 by rw mpoly_evalC 0 ttca
+                              << Goal >>
+                            Close 0
+Rule/Rewrite test14:
+   Proof:
+      0 by rwh mpolyTerm2mpoly 2
+        0.1 by proveVarTypesT <<Z^car>> [<<'x>>;<<'y>>] taa
+          0.1.1 by
+          eval_standardizeElim 2 <<unitringCE[i:l]>> thenAT (repeatT (rw reduceC 0) ttca)
+            0.1.1.1 by autoT
+              << Goal >>
+            Close 0.1.1.1
+            0.1.1.2 by rw reduceC 2 thenT (repeatT (rw reduceC 0) ttca)
+              No Subgoals
+            Close 0.1.1.2
+          Close 0.1.1
+        Close 0.1
+      Close 0
+Rule/Rewrite test15:
+   Proof:
+      0 by
+      stdT <<unitringCE[i:l]>> <<Z>> [<<'x>>;<<'y>>] 0 taa thenAT repeatT (rw reduceC 0) ttca
+        No Subgoals
+      Close 0
