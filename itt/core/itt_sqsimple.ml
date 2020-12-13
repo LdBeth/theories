@@ -103,7 +103,7 @@ let process_sqsimple_resource_annotation ?labels name contexts args stmt loc _ta
    rule_labels_not_allowed loc labels;
    let assums, goal = unzip_mfunction stmt in
    let t = dest_sqsimple_term (TermMan.concl goal) in
-      [t, Lm_list_util.some_map (process_assum name) assums]
+      [t, List.filter_map (process_assum name) assums]
 
 doc <:doc<
    @modsection{Basic Rules}
