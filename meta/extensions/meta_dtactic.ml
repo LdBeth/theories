@@ -389,6 +389,8 @@ let rec meta_dForT i =
 (*
  * By default, dT 0 should always make progress.
  *)
+
+(*
 let eq_exn = RefineError ("meta_dT", StringError "elim rule not suitable for autoT")
 
 let rec num_equal_aux t hyps i =
@@ -432,7 +434,7 @@ let resource auto += [ {
    auto_tac = onSomeHypT auto_dT;
    auto_type = AutoComplete;
 }]
-
+*)
 
 (*
  * Add meta_dT 0 to the browser.
