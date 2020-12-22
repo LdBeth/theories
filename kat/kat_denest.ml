@@ -1,8 +1,6 @@
 extends Kat_std
 extends Kat_bool
 
-open Top_conversionals
-open Base_select
 open Dtactic
 
 interactive denestwhile {| intro[] |}:

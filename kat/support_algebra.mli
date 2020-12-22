@@ -1,10 +1,5 @@
-open Refiner.Refiner.Term
-
+open Basic_tactics
 open Term_stable
-
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
 
 resource (term * conv,  conv) commutative
 
@@ -16,5 +11,4 @@ topval assocC : conv
 topval revAssocC : conv
 
 topval subAssocC : int -> int -> conv -> conv
-topval addrAssocC : int list -> conv -> conv
-
+(* topval addrAssocC : int list -> conv -> conv *)

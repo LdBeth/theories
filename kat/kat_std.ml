@@ -1,7 +1,5 @@
 extends Kat_ax
 
-open Top_conversionals
-open Base_select
 open Dtactic
 
 interactive denest {| intro[] |}:
@@ -9,6 +7,7 @@ interactive denest {| intro[] |}:
      [wf] sequent{ <H> >- 'x in kleene} -->
      sequent{ <H> >- ((star{'x}) * (star{('y * (star{'x}))})) ~ (star{('x + 'y)}) }
 
+(*
 interactive_rw denestl_rw :
      ('y in kleene) -->
      ('x in kleene) -->
@@ -18,12 +17,14 @@ interactive_rw denestr_rw :
      ('y in kleene) -->
      ('x in kleene) -->
      (star{('x + 'y)}) <--> ((star{'x}) * (star{('y * (star{'x}))}))
+*)
 
 interactive slide {| intro[] |}:
      [wf] sequent{ <H> >- 'y in kleene} -->
      [wf] sequent{ <H> >- 'x in kleene} -->
      sequent{ <H> >- ('x * (star{('y * 'x)})) ~ ((star{('x * 'y)}) * 'x) }
 
+(*
 interactive_rw slidel_rw :
      ('y in kleene) -->
      ('x in kleene) -->
@@ -33,6 +34,7 @@ interactive_rw slider_rw :
      ('y in kleene) -->
      ('x in kleene) -->
      ((star{('x * 'y)}) * 'x) <--> ('x * (star{('y * 'x)}))
+*)
 
 interactive mono_star :
      [wf] sequent{ <H> >- 'y in kleene} -->
@@ -107,6 +109,7 @@ interactive antisym :
      sequent{ <H> >- 'x <= 'y } -->
      sequent{ <H> >- 'x ~ 'y }
 
+(*
 interactive_rw antisyml_rw 'y :
      ('y in kleene) -->
      ('x in kleene) -->
@@ -120,6 +123,7 @@ interactive_rw antisymr_rw 'x :
      ('y <= 'x) -->
      ('x <= 'y) -->
      'y <--> 'x
+*)
 
 interactive ref_leq {| intro[] |}:
      [wf] sequent{ <H> >- 'x in kleene} -->
@@ -132,6 +136,7 @@ interactive cong_plusl :
      sequent{ <H> >- 'y ~ 'z } -->
      sequent{ <H> >- ('x + 'y) ~ ('x + 'z) }
 
+(*
 interactive_rw cong_plusll_rw 'z :
      ('x in kleene) -->
      ('z in kleene) -->
@@ -145,11 +150,13 @@ interactive_rw cong_pluslr_rw 'y :
      ('y in kleene) -->
      ('y ~ 'z) -->
      ('x + 'z) <--> ('x + 'y)
+*)
 
 interactive id_plusl {| intro[] |}:
      [wf] sequent{ <H> >- 'x in kleene} -->
      sequent{ <H> >- (0 + 'x) ~ 'x }
 
+(*
 interactive_rw id_plusll_rw :
      ('x in kleene) -->
      (0 + 'x) <--> 'x
@@ -157,4 +164,4 @@ interactive_rw id_plusll_rw :
 interactive_rw id_pluslr_rw :
      ('x in kleene) -->
      'x <--> (0 + 'x)
-
+*)

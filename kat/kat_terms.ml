@@ -1,7 +1,6 @@
 extends Base_theory
 extends Support_algebra
-extends Base_select
-extends Itt_struct2
+extends Itt_squiggle
 
 open Dtactic
 open Top_conversionals
@@ -132,12 +131,3 @@ interactive_rw rev_plus_assotiative: ('x + ('y + 'z)) <--> (('x + 'y) + 'z)
 let resource associative +=
    [ <<'a * 'b>>, (prod_assotiative, rev_prod_assotiative);
      <<'a + 'b>>, (plus_assotiative, rev_plus_assotiative)]
-
-
-
-
-
-
-
-
-

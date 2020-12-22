@@ -1,7 +1,6 @@
 extends Base_theory
 extends Support_algebra
-extends Base_select
-extends Itt_struct2
+extends Itt_squiggle
 
 (************************************************************************
  * TERMS                                                                *

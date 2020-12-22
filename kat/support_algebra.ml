@@ -1,18 +1,13 @@
 extends Base_theory
 
-open Lm_printf
-
+open Basic_tactics
 open Tactic_type
+(*
 open Top_conversionals
-open Dtactic
-open Tactic_type.Conversionals
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.Term
+open Dtactic *)
 open Refiner.Refiner.RefineError
 
 open Term_stable
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 
@@ -28,7 +23,7 @@ let extract_data tbl =
    in
       termC rw
 
-let resource commutative =
+let resource (term * conv,  conv) commutative =
    stable_resource_info extract_data
 
 let symC =
@@ -40,7 +35,7 @@ let symC =
 
 let id tbl = tbl
 
-let resource associative =
+let resource (term * (conv * conv), (conv * conv) term_stable) associative =
    stable_resource_info id
 
 let revAssocC =
@@ -108,6 +103,7 @@ let subAssocC first length conv  =
                raise (RefineError ("subAssocC", StringError ("subAssocC is applied to a term that associative resource does not know about")))
         )
 
+(*
 let rec addrAssocC addr conv =
    funC (fun env ->
       match  addr with
@@ -117,4 +113,4 @@ let rec addrAssocC addr conv =
                try  subAssoc n m (addrAssocC rest conv) env
                with Not_found ->  addrC [n] (addrAssocC (m::rest) conv)
         )
-(*            _ ->  raise (Invalid_argument ("addrAssocC is applied to an associative term. Need at least two argements for adress")) *)
+            _ ->  raise (Invalid_argument ("addrAssocC is applied to an associative term. Need at least two argements for adress")) *)

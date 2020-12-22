@@ -1,7 +1,6 @@
 extends Kat_terms
 
 open Top_conversionals
-open Dtactic
 
 
 prim_rw prod_assotiative {|reduce |}: (('x * 'y) * 'z) <--> ('x * ('y * 'z))
@@ -48,8 +47,8 @@ let resource commutative +=
      <<'a + 'b>>, plus_commutative]
 
 
-prim_rw neg_l {|reduce |}:   (-1)  <--> 0
-prim_rw neg_0 {|reduce |}:   (-0)  <--> 1
+prim_rw neg_l {|reduce |}:  minus{1}  <--> 0
+prim_rw neg_0 {|reduce |}:  minus{0}  <--> 1
 
 
 prim_rw double_neg {|reduce |}:

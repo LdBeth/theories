@@ -4,7 +4,7 @@ THEORY_DEPS[] +=
 # Library files
 MPFILES[] =
     support_algebra
-    base_select
+#    base_select
     kat_terms
     kat_axioms
     kat_ax
