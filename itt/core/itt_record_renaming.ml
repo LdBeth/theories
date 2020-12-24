@@ -141,8 +141,9 @@ interactive_rw rename_sym :
 doc <:doc<
    @begin[small]
    Usually we will consider this property as side effect and will not use it.
-   But sometimes this property could be useful. See for example Section @refsection[Inverse_order].
+   But sometimes this property could be useful. See for example Section @refsection["Inverse Order"].
    @end[small]
+
    @docoff
 >>
 
@@ -192,6 +193,7 @@ doc <:doc<
            First, it replaces $r$ by <<rename[b:t,a:t]{ rename[a:t,b:t]{'r} }>> in the immediate subterms of the term and then do @em{exactly one} reduction on the term.
            (It fails if it can not do the reduction).
      @end[small]
+
    @docoff
 >>
 

@@ -1,3 +1,6 @@
+THEORYNAME = kat
+THEORYDESCR = Kleene Algebra with Tests
+
 THEORY_DEPS[] +=
     itt/core
 

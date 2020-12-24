@@ -1,6 +1,37 @@
+doc <:doc<
+   @spelling{Kleene}
+
+   @module[Kat_terms]
+
+   The @emph{Kleene Algebra with tests} is a two-sorted algebra
+
+   $$
+     (K, B, +, @cdot, *, 0, 1, @neg)
+   $$
+
+   where $B @subseteq K$ and
+
+   $$
+     (K, +, @cdot, *, 0, 1)
+   $$
+
+   is a Kleene algebra and
+
+   $$
+     (B, +, @cdot, @neg, 0, 1)
+   $$
+
+   is a Boolean algebra.
+
+>>
+
+doc <:doc<
+   @parents
+>>
 extends Base_theory
 extends Support_algebra
 extends Itt_squiggle
+doc docoff
 
 open Dtactic
 open Top_conversionals
@@ -9,28 +40,22 @@ open Top_conversionals
  * TERMS                                                                *
  ************************************************************************)
 
-
+doc <:doc<
+   @terms
+>>
 declare number[n:n] (* 1 and 0 *)
-
 declare prod{'x;'y} (*   'x * 'y  *)
-
 declare union{'x;'y} (*   'x + 'y  *)
-
 declare minus{'x}    (*   ~'x  *)
-
 declare star{'x}    (*   'x^*  *)
-
 declare bool
-
 declare kleene
 
 (* Less and greater *)
 
 define le : le{'x;'y} <--> ('x + 'y) ~ 'y
-
 define ge : ge{'x;'y} <--> le{'y;'x}
-
-
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -72,7 +97,9 @@ dform ge_df : ('x >= 'y) = 'x " " ge " " 'y
  * WELL FORMEDNESS                                                      *
  ************************************************************************)
 
-
+doc <:doc<
+   @rules
+>>
 prim times_wf {| intro[] |}:
    sequent { <H> >- 'x in kleene} -->
    sequent { <H> >- 'y in kleene} -->
@@ -127,6 +154,8 @@ interactive_rw rev_prod_assotiative: ('x * ('y * 'z)) <--> (('x * 'y) * 'z)
 prim_rw plus_assotiative {|reduce |}: (('x + 'y) + 'z) <--> ('x + ('y + 'z))
 
 interactive_rw rev_plus_assotiative: ('x + ('y + 'z)) <--> (('x + 'y) + 'z)
+
+doc docoff
 
 let resource associative +=
    [ <<'a * 'b>>, (prod_assotiative, rev_prod_assotiative);
