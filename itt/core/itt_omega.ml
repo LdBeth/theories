@@ -114,7 +114,7 @@ end
 module VarType =
 struct
    type t=int
-   let compare (a: int) b = Stdlib.compare a b
+   let compare = Int.compare
 
    let print out v =
       if v>0 then fprintf out "v%i" v
@@ -133,35 +133,29 @@ module Var2Index(Ring : RingSig) =
 struct
    module Table=Hashtbl.Make(Var)
 
-   type t=int ref * int Table.t
+   type t=int Table.t
 
-   let create n = (ref 0, Table.create n)
+   let create = Table.create
 
-   let length (r,_) = !r
+   let length = Table.length
 
    let lookup (info:t) v =
-      let count, table = info in
-      if Table.mem table v then
-         Table.find table v
-      else
-         let index=(!count)+1 in
-         begin
-            Table.add table v index;
-            count:=index;
-            index
-         end
+      match Table.find_opt info v with
+         Some a -> a
+       | None -> let a = length info + 1 in
+                    Table.add info v a;
+                    a
 
 (* unused
    let print out info =
-      let count,table=info in
       let aux k d = fprintf out "%a ->v%i%t" print_term k d eflush in
       (*printf "count=%i%t" !count eflush;*)
       Table.iter aux table
 *)
 
-   let invert ((count,table) : t) =
-      let ar=Array.make !count (Ring.term_of Ring.ringZero) in
-      let aux key data = (ar.(data-1)<-key) in
+   let invert (table : t) =
+      let ar=Array.make (length table) (Ring.term_of Ring.ringZero) in
+      let aux key data = (ar.(pred data) <- key) in
       Table.iter aux table;
       ar
 
@@ -169,7 +163,7 @@ struct
       if index=0 then
          Ring.term_of (Ring.ringUnit)
       else
-         inverted.(index-1)
+         inverted.(pred index)
 end
 
 module MakeMonom(Ring : RingSig) =
