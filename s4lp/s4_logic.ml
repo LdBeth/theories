@@ -2,6 +2,7 @@ doc <:doc<
    @spelling{bi}
    @module[s4_logic]
 
+   S4 is propositional logic equipped with a single modality.
    @docoff
    ----------------------------------------------------------------
 
@@ -42,11 +43,11 @@ extends Base_theory
 
 open Lm_debug
 open Lm_printf
-open Simple_print
-
-open Browser_resource
 
 open Basic_tactics
+
+module Term = Refiner.Refiner.Term
+module TermMan = Refiner.Refiner.TermMan
 
 (*
  * Show that the file is loading.
@@ -61,12 +62,14 @@ let debug_s4prover =
         debug_value = false
       }
 
+(*
 let debug_jprover =
    create_debug (**)
       { debug_name = "jprover";
         debug_description = "Display Jprover operations";
         debug_value = true
       }
+*)
 
 declare default_extract
 declare typeclass Concl -> Dform
@@ -409,7 +412,7 @@ struct
 
    let thenTi tac1 tac2 i = tac1 i thenT tac2
    let thenLTi tac1 tacl i = tac1 i thenLT tacl
-   let aTi tac t i = tac i t
+   (* let aTi tac t i = tac i t *)
 
    let hypothesis = argfunT (fun i p ->
       let t = Sequent.nth_hyp p i in

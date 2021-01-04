@@ -3,9 +3,9 @@ THEORYDESCR = Logics of knowledge and proofs: S4, LP, S4nJ, S4nLP, etc
 
 # Library files
 MPFILES[] =
-	hilbert_internal
-	s4_logic
-	s4_tests
-	s4_internal
-	hilbert_logic
-#   lp_hilbert
+    hilbert_internal
+    s4_logic
+    s4_tests
+    # s4_internal
+    # hilbert_logic
+    # lp_hilbert

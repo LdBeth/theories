@@ -1,15 +1,13 @@
 open Lm_symbol
-open Lm_printf
 
-open Term_sig
 open Refiner.Refiner
 open Term
 open RefineError
 
 open Hilbert_internal
-open S4_logic
-open LP
-open S4G
+(* open S4_logic *)
+(* open LP *)
+(* open S4G *)
 
 module Structured_S4_Logic =
 struct

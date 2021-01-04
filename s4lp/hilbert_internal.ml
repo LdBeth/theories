@@ -1,10 +1,4 @@
 open Lm_symbol
-open Lm_printf
-
-open Term_sig
-open Refiner.Refiner
-open Term
-open RefineError
 
 module SymbolicSet = functor (O : Lm_set_sig.OrderedTypeDebug) ->
 struct
@@ -17,6 +11,7 @@ struct
       let rest = remove set first in
       fold op (base first) rest
 
+(*
    let print out set =
       Lm_printf.fprintf out "{";
       iter (fun i -> Lm_printf.fprintf out "%a " O.print i) set;
@@ -30,7 +25,7 @@ struct
         (fun i0 -> if O.compare i i0 = 0 then raise (Found i0))
         set;
       raise Not_found
-    with Found i1 -> i1
+    with Found i1 -> i1 *)
 
   exception Success
 
@@ -59,14 +54,7 @@ module Integer =
 struct
    type t = int
 
-   let compare (i : int) (j : int) =
-      if i < j then
-         -1
-      else if i > j then
-         1
-      else
-         0
-
+   let compare = Int.compare
    let print out i = Lm_printf.fprintf out "%i" i
 end
 
@@ -101,6 +89,7 @@ struct
 
    let empty = []
 
+   (*
    let rec mem s i =
    match s with
       [] -> false
@@ -108,7 +97,7 @@ struct
          if Set.mem h i then
             true
          else
-            mem t i
+            mem t i *)
 
    let rec find s i =
    match s with
@@ -200,9 +189,10 @@ struct
 
    type family = Essential of IntSet.t | NonEssential of int
 
+   (*
    let print_family out = function
       Essential s -> Lm_printf.fprintf out "Ess%a" IntSet.print s
-    | NonEssential i -> Lm_printf.fprintf out "NonEss%i" i
+    | NonEssential i -> Lm_printf.fprintf out "NonEss%i" i *)
 
    let strip_principality family =
       Set.fold
@@ -390,11 +380,10 @@ end
 
 exception Not_implemented
 
-open LP
-
 module OrderedFormula =
 struct
 
+open LP
 type t = formula
 
 let fam_cmp f1 f2 =
@@ -505,11 +494,14 @@ struct
    include SymbolicSet(OrderedFormula)
 
    let print out set =
-      iter (fun f -> Lm_printf.fprintf out "%a " print_formula f) set
+      iter (fun f -> Lm_printf.fprintf out "%a " LP.print_formula f) set
+
+   let check x = x (* no check is performed *)
 end
 
 module FMap =
 struct
+   open LP
 
    include Lm_map.LmMakeList(OrderedFormula)
 
@@ -531,6 +523,96 @@ struct
          map
 end
 
+module S4G =
+struct
+   type fset = FSet.t
+
+   type rule_node =
+      Axiom of LP.formula
+    | AxiomFalsum
+    | NegLeft of LP.formula * gentzen
+    | NegRight of LP.formula * gentzen
+    | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
+    | ImplRight of LP.formula * LP.formula * gentzen
+    | AndLeft of LP.formula * LP.formula * gentzen
+    | AndRight of LP.formula * LP.formula * gentzen * gentzen
+    | OrLeft of LP.formula * LP.formula * gentzen * gentzen
+   | OrRight of LP.formula * LP.formula * gentzen
+    | BoxRight of int * LP.formula * gentzen
+    | BoxLeft of LP.formula * gentzen
+
+   and gentzen = rule_node * fset * fset (* rule, hyps, concls *)
+
+   let rec subst_provisionals_in_gentzen subst (r, hyps, concls) =
+      let hyps' = FSet.map (LP.subst_provisionals_in_formula subst) hyps in
+      let concls' = FSet.map (LP.subst_provisionals_in_formula subst) concls in
+      let r' = match r with
+         Axiom f -> Axiom (LP.subst_provisionals_in_formula subst f)
+       | AxiomFalsum -> r
+       | NegLeft(a,subderivation) ->
+            NegLeft(
+               LP.subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+     | NegRight(a,subderivation) ->
+        NegRight(
+           LP.subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+       | ImplLeft(a,b,left,right) ->
+            ImplLeft(
+               LP.subst_provisionals_in_formula subst a,
+               LP.subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst left,
+               subst_provisionals_in_gentzen subst right
+            )
+       | ImplRight(a,b,subderivation) ->
+            ImplRight(
+               LP.subst_provisionals_in_formula subst a,
+               LP.subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+     | AndLeft(a,b,subderivation) ->
+            AndLeft(
+               LP.subst_provisionals_in_formula subst a,
+               LP.subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+     | AndRight(a,b,left,right) ->
+        AndRight(
+               LP.subst_provisionals_in_formula subst a,
+               LP.subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst left,
+               subst_provisionals_in_gentzen subst right
+            )
+     | OrLeft(a,b,left,right) ->
+            OrLeft(
+               LP.subst_provisionals_in_formula subst a,
+               LP.subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst left,
+               subst_provisionals_in_gentzen subst right
+            )
+     | OrRight(a,b,subder) ->
+            OrRight(
+               LP.subst_provisionals_in_formula subst a,
+               LP.subst_provisionals_in_formula subst b,
+               subst_provisionals_in_gentzen subst subder
+            )
+       | BoxRight(agent,a,subderivation) ->
+            BoxRight(
+               agent,
+               LP.subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+       | BoxLeft(a,subderivation) ->
+            BoxLeft(
+               LP.subst_provisionals_in_formula subst a,
+               subst_provisionals_in_gentzen subst subderivation
+            )
+      in
+      r', hyps', concls'
+end
+
 (*
 let rec pt2term = function
   Var s -> mk_var_term s
@@ -548,32 +630,34 @@ let rec fml2term = function
  | Pr(s,t) -> mk_pr_term (pr2term s) (fml2term t)
 *)
 
-exception Not_axiom
+(* exception Not_axiom *)
+
+open LP
 
 let prop_axiom_index = function
   Implies(a1,Implies(b,a2)) when a1=a2 -> 1
  | Implies(Implies(a1,Implies(b1,c1)),Implies(Implies(a2,b2),Implies(a3,c2)))
-  when a1=a2 & a1=a3 & b1=b2 & c1=c2 -> 2
+  when a1=a2 && a1=a3 && b1=b2 && c1=c2 -> 2
  | Implies(And(a1,b),a2) when a1=a2 -> 3
  | Implies(And(a,b1),b2) when b1=b2 -> 4
- | Implies(a1,Implies(b1,And(a2,b2))) when a1=a2 & b1=b2 -> 5
+ | Implies(a1,Implies(b1,And(a2,b2))) when a1=a2 && b1=b2 -> 5
  | Implies(a1,Or(a2,b)) when a1=a2 -> 6
  | Implies(b1,Or(a,b2)) when b1=b2 -> 7
  | Implies(Implies(a1,c1),Implies(Implies(b1,c2),Implies(Or(a2,b2),c3)))
-  when a1=a2 & b1=b2 & c1=c2 & c1=c3 -> 8
+  when a1=a2 && b1=b2 && c1=c2 && c1=c3 -> 8
  | Implies(Implies(a1,b1),Implies(Implies(a2,Neg(b2)),Neg(a3)))
-  when a1=a2 & a1=a3 & b1=b2 -> 9
+  when a1=a2 && a1=a3 && b1=b2 -> 9
  | Implies(a1,Implies(Neg(a2),b)) when a1=a2 -> 10
  | Or(a1,Neg(a2)) when a1=a2 -> 11
  | Implies(Pr(s1,Implies(a1,b1)),Implies(Pr(t1,a2),Pr(App(s2,t2),b2)))
-  when a1=a2 & b1=b2 & s1=s2 & t1=t2 -> 12
+  when a1=a2 && b1=b2 && s1=s2 && t1=t2 -> 12
  | Implies(Pr(t,a1),a2) when a1=a2 -> 13
- | Implies(Pr(t1,a1),Pr(Check(t2),Pr(t3,a2))) when a1=a2 & t1=t2 & t1=t3 -> 14
- | Implies(Pr(t1,a1),Pr(Plus(s,t2),a2)) when t1=t2 & a1=a2 -> 15
- | Implies(Pr(s1,a1),Pr(Plus(s2,t),a2)) when s2=s2 & a1=a2 -> 16
- | Implies(Box(Modal i1, Implies(a1,b1)),Implies(Box(Modal i2,a2),Box(Modal i3,b2))) when i1=i2 & i1=i3 & a1=a2 & b1=b2 -> 17
+ | Implies(Pr(t1,a1),Pr(Check(t2),Pr(t3,a2))) when a1=a2 && t1=t2 && t1=t3 -> 14
+ | Implies(Pr(t1,a1),Pr(Plus(s,t2),a2)) when t1=t2 && a1=a2 -> 15
+ | Implies(Pr(s1,a1),Pr(Plus(s2,t),a2)) when s2=s2 && a1=a2 -> 16
+ | Implies(Box(Modal i1, Implies(a1,b1)),Implies(Box(Modal i2,a2),Box(Modal i3,b2))) when i1=i2 && i1=i3 && a1=a2 && b1=b2 -> 17
  | Implies(Box(Modal i, a1),a2) when a1=a2 -> 18
- | Implies(Box(Modal i1, a1),Box(Modal i2,Box(Modal i3,a2))) when i1=i2 & i1=i3 & a1=a2 -> 19
+ | Implies(Box(Modal i1, a1),Box(Modal i2,Box(Modal i3,a2))) when i1=i2 && i1=i3 && a1=a2 -> 19
  | Implies(Pr(t,a1),Box(Modal i,a2)) when a1=a2 -> 20
  | _ -> 0
 
@@ -622,7 +706,7 @@ let rec check_proof_hidden hyps d f hidden =
       end
    | Nec(i,d1) ->
       begin match f with
-        Box(Modal i1, f1) when i=i1 & (hyps=[] || prop_axiom_index f1 > 0) ->
+        Box(Modal i1, f1) when i=i1 && (hyps=[] || prop_axiom_index f1 > 0) ->
           check_proof_hidden hyps d1 f1 hidden
        | _ ->
           false, FSet.empty
@@ -817,96 +901,6 @@ let syllogism a b c proofAB proofBC =
    assert(check_proof [] proof6 ac);
    proof6
 
-module S4G =
-struct
-   type fset = FSet.t
-
-   type rule_node =
-      Axiom of LP.formula
-    | AxiomFalsum
-    | NegLeft of LP.formula * gentzen
-   | NegRight of LP.formula * gentzen
-    | ImplLeft of LP.formula * LP.formula * gentzen * gentzen
-    | ImplRight of LP.formula * LP.formula * gentzen
-   | AndLeft of LP.formula * LP.formula * gentzen
-   | AndRight of LP.formula * LP.formula * gentzen * gentzen
-   | OrLeft of LP.formula * LP.formula * gentzen * gentzen
-   | OrRight of LP.formula * LP.formula * gentzen
-    | BoxRight of int * LP.formula * gentzen
-    | BoxLeft of LP.formula * gentzen
-
-   and gentzen = rule_node * fset * fset (* rule, hyps, concls *)
-
-   let rec subst_provisionals_in_gentzen subst (r, hyps, concls) =
-      let hyps' = FSet.map (subst_provisionals_in_formula subst) hyps in
-      let concls' = FSet.map (subst_provisionals_in_formula subst) concls in
-      let r' = match r with
-         Axiom f -> Axiom (subst_provisionals_in_formula subst f)
-       | AxiomFalsum -> r
-       | NegLeft(a,subderivation) ->
-            NegLeft(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_gentzen subst subderivation
-            )
-     | NegRight(a,subderivation) ->
-        NegRight(
-           subst_provisionals_in_formula subst a,
-               subst_provisionals_in_gentzen subst subderivation
-            )
-       | ImplLeft(a,b,left,right) ->
-            ImplLeft(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_formula subst b,
-               subst_provisionals_in_gentzen subst left,
-               subst_provisionals_in_gentzen subst right
-            )
-       | ImplRight(a,b,subderivation) ->
-            ImplRight(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_formula subst b,
-               subst_provisionals_in_gentzen subst subderivation
-            )
-     | AndLeft(a,b,subderivation) ->
-            AndLeft(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_formula subst b,
-               subst_provisionals_in_gentzen subst subderivation
-            )
-     | AndRight(a,b,left,right) ->
-        AndRight(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_formula subst b,
-               subst_provisionals_in_gentzen subst left,
-               subst_provisionals_in_gentzen subst right
-            )
-     | OrLeft(a,b,left,right) ->
-            OrLeft(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_formula subst b,
-               subst_provisionals_in_gentzen subst left,
-               subst_provisionals_in_gentzen subst right
-            )
-     | OrRight(a,b,subder) ->
-            OrRight(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_formula subst b,
-               subst_provisionals_in_gentzen subst subder
-            )
-       | BoxRight(agent,a,subderivation) ->
-            BoxRight(
-               agent,
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_gentzen subst subderivation
-            )
-       | BoxLeft(a,subderivation) ->
-            BoxLeft(
-               subst_provisionals_in_formula subst a,
-               subst_provisionals_in_gentzen subst subderivation
-            )
-      in
-      r', hyps', concls'
-end
-
 open S4G
 
 let sequent_formula hyps concls =
@@ -924,6 +918,7 @@ let sequent_formula hyps concls =
    in
    Implies(fh, fc)
 
+(*
 let rec substitute_box_for_provisional i = function
    Implies(a,b) ->
       Implies(
@@ -955,6 +950,7 @@ let rec substitute_box_for_provisional i = function
          t,
          substitute_box_for_provisional i a
       )
+*)
 
 let rec assign_fresh counter = function
    Implies(a,b) ->
@@ -1250,7 +1246,7 @@ let make_provisionals_sum set =
       (fun acc e -> LP.Plus(acc,Provisional e))
       set
 
-let rec make_provisionals_subst families =
+let make_provisionals_subst families =
    FamilyPart.fold
       (fun subst set ->
          let family_set = FamilyPart.strip_principality set in
@@ -1438,7 +1434,7 @@ let spread_box f proof =
    | _ ->
       proof
 
-(* []a & []b -> [](a&b) *)
+(* []a &[]b -> [](a&b) *)
 let conj2box_impl_box_conj2 agent a b =
   Lm_printf.printf "a=%a\nb=%a\n" print_formula a print_formula b;
   let ax = Implies(a,Implies(b,And(a,b))) in
@@ -1540,7 +1536,7 @@ let rec introspections agent set =
 
 (* Gentzen to Hilbert transformation (phase 3) *)
 let rec g2h families subst = function
-      Axiom(f), hyps, concls ->
+      S4G.Axiom(f), hyps, concls ->
          assert (FSet.mem hyps f);
          assert (FSet.mem concls f);
          realize_axiom subst hyps concls
@@ -1734,7 +1730,7 @@ let _ =
    assert (FMap.mem m'' s);
    assert (FMap.find m'' s = s)
 
-let proof1 =
+let _proof1 =
    BoxLeft(
       Neg(Implies(s, Box(Modal 0, s))),
       (

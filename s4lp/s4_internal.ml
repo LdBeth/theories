@@ -1,8 +1,6 @@
 open Lm_int_set
 open Lm_symbol
-open Lm_printf
 
-open Term_sig
 open Refiner.Refiner
 open Term
 open RefineError
@@ -75,7 +73,7 @@ struct
 
    let append_inf inf hyp _ r =
       match r, inf with
-         Ax, _ -> Axiom(term2formula hyp, FSet.empty, FSet.empty) :: inf
+         Ax, _ -> (Axiom(term2formula hyp, FSet.empty, FSet.empty) : s4_derivation) :: inf
        | Andl,t::ts -> AndLeft(term2formula hyp, t) :: ts
        | Negl,t::ts -> NegLeft(term2formula hyp, t) :: ts
        | Orl, t1::t2::ts ->
@@ -209,7 +207,7 @@ let rec count_boxes n = function
 		count_boxes n1 d2
  | ImplRight _, _, d ->
  		count_boxes n d
- | BoxLeft (_, d ->
+ | BoxLeft _, d ->
  		count_boxes n d in
  | BoxRight _, d, hyps, concls ->
  		let n' = succ (count_boxes n d) in
@@ -359,8 +357,9 @@ let syllogism concl1 hilb1 concl2 hilb2 =
 	 | _ ->
 	 		raise (Invalid_argument "syllogism: unexpected shape of conclusions")
 
+(*
 let boxed_only_hyps set =
-	FSet.filter (fun f -> match f with Box(Evidence _, _) -> true | _ -> false) set
+	FSet.filter (fun f -> match f with Box(Evidence _, _) -> true | _ -> false) set *)
 
 let rec sum_provisionals = function
 	[] -> raise (Invalid_argument "sum_provisionals bug: empty list")
@@ -597,10 +596,11 @@ let rec realize families terms d =
 	 | _ ->
 	 		raise (Invalid_argument "realize: a rule for an unsupported connective")
 
+
 let a = Atom (Lm_symbol.add "a")
 let a_impl_a = Implies(a, a)
 
-let proof0 = Axiom(a, FSet.empty, FSet.empty)
+let proof0 : s4_derivation = Axiom(a, FSet.empty, FSet.empty)
 let proof1 = ImplRight(a, a, proof0)
 let proof2 = BoxRight(Box(Evidence 0, a_impl_a), FSet.empty, FSet.empty, proof1)
 let families, proof, hyps, concls = allocate proof2

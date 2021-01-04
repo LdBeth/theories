@@ -27,7 +27,7 @@ proof(implLeft(A, B), Gamma, Delta, branches(DerivationA, DerivationB)) :-
 	DerivationB = proof(RuleB, [B|Gamma1], Delta, BranchesB),
 	DerivationA,
 	DerivationB.
-	
+
 proof(implRight(A, B), Gamma, Delta, chain(Derivation)) :-
 	takeout(impl(A,B), Delta, Delta1),
 	Derivation = proof(Rule, [A|Gamma], [B|Delta1], Branches),
@@ -163,7 +163,7 @@ assignFamily(proof(implLeft(A, B), Gamma, Delta, branches(DerivationA, Derivatio
 	member([B,B2], Map2),
 	Map = [[impl(A, B), impl(A2, B2)] | Map2],
 	Gamma2 = [impl(A2, B2) | Gamma1].
-	
+
 assignFamily(proof(implRight(A, B), Gamma, Delta, chain(Derivation)),
 	     fProof(implRight(A2, B2), Gamma2, Delta2, chain(Derivation2)),
 	     Map0, Map,
