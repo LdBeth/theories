@@ -26,23 +26,22 @@
  *)
 extends Pmn_core_terms
 
-open Basic_tactics
 open Itt_equal
 open Itt_dfun
 
 (************************************************************************
  * Display.
  *)
-dform ty_power_df : <:xterm< TyPower{ty} >> =
+dform ty_power_df : <:xterm< TyPower{'ty} >> =
    `"<: " slot{'ty}
 
 dform fsub_df : <:xterm< "fsub" >> =
    `"fsub"
 
-dform fsub_subtype_df : parens :: "prec"[prec_equal] :: <:xterm< fsub_subtype{t1; t2} >> =
+dform fsub_subtype_df : parens :: "prec"[prec_equal] :: <:xterm< fsub_subtype{'t1; 't2} >> =
    szone pushm[3] slot{'t1} `" <:" hspace slot{'t2} popm ezone
 
-dform fsub_member_df : parens :: "prec"[prec_apply] :: <:xterm< fsub_member{e; ty} >> =
+dform fsub_member_df : parens :: "prec"[prec_apply] :: <:xterm< fsub_member{'e; 'ty} >> =
    szone pushm[3] slot{'e} `" " Mpsymbols!member hspace slot{'ty} popm ezone
 
 dform fsub_Prop_df : <:xterm< "Prop" >> =

@@ -27,19 +27,15 @@ doc <:doc<
 >>
 
 extends Itt_hoas_theory
-open Basic_tactics
 extends Reflect_pmn_core_logic
+
 open Basic_tactics
-open Itt_equal
-open Itt_dfun
-open Itt_logic
 
 open Itt_struct
 open Itt_unit
 open Itt_hoas_bterm_wf
 open Itt_hoas_sequent_bterm
 open Itt_hoas_sequent_term
-open Itt_hoas_sequent_normalize
 open Itt_hoas_normalize
 
 
@@ -77,12 +73,12 @@ interactive subterm_is_term:  <:xrule<
 
 
 interactive top_is_top:  <:xrule<
-  <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{TyTop; S}  |}} -->
+  <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{TyTop; 'S}  |}} -->
   "wf": <H1> >- IsJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{'T;TyTop}  |}} -->
   "wf": <H1> >- hyp_context {| >- hyplist {| <H> |} |} in CVar{0} -->
   "wf": <H1> >- vbind{| <H> >- 'T |} in BTerm{length{vlist{| <H> |} } } -->
   "wf": <H1> >- vbind{| <H> >- 'S |} in BTerm{length{vlist{| <H> |} } } -->
-  <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{T; S}  |}}
+  <H1> >- ProvableJudgment {pmn_core_logic{};  $`fsub{| <H> >- fsub_subtype{'T; 'S}  |}}
 >>
 
 (*

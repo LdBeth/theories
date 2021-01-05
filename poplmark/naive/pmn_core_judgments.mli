@@ -26,8 +26,6 @@
  *)
 extends Pmn_core_terms
 
-open Basic_tactics
-
 (************************************************************************
  * Sequents.
  *

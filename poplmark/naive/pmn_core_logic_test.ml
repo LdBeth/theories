@@ -25,13 +25,8 @@
 extends Itt_hoas_theory
 extends Pmn_core_logic
 
-open Basic_tactics
-open Itt_equal
-open Itt_dfun
-open Itt_logic
-
 interactive test_ref : <:xrule<
-   fsub{| <H> >- fsub_subtype{T; T} |}
+   fsub{| <H> >- fsub_subtype{'T; 'T} |}
 >>
 
 (*

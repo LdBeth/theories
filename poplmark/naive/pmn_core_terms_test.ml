@@ -24,14 +24,9 @@
  *)
 extends Reflect_pmn_core_terms
 
-open Basic_tactics
-open Itt_equal
-open Itt_dfun
-open Itt_logic
-
 interactive tyExp_left 't2 : <:xrule<
-   <H1> >- ProvableSequent{Reflect_pmn_core_terms!pmn_core_terms; $`meta_type{| <H> >- meta_member{ TyFun{t1; t2}; TyExp{} } |}} -->
-   <H1> >- ProvableSequent{Reflect_pmn_core_terms!pmn_core_terms; $`meta_type{| <H> >- meta_member{ t1; TyExp{} } |} }
+   <H1> >- ProvableSequent{Reflect_pmn_core_terms!pmn_core_terms; $`meta_type{| <H> >- meta_member{ TyFun{'t1; 't2}; TyExp{} } |}} -->
+   <H1> >- ProvableSequent{Reflect_pmn_core_terms!pmn_core_terms; $`meta_type{| <H> >- meta_member{ 't1; TyExp{} } |} }
 >>
 
 (*
