@@ -561,7 +561,7 @@ let lambdaSqElimFull2T = lambda_sqequal_elim2
 let genSOVarT = argfunT (fun s p ->
    let t = concl p in
    if not (is_squiggle_term t) then
-      raise (RefineError("Itt_subst2.genSOVarT", StringTermError("not a squiggle term", t)));
+      raise (RefineError("Itt_struct2.genSOVarT", StringTermError("not a squiggle term", t)));
    let a, b = dest_squiggle t in
    let v = Lm_symbol.add s in
    let v' = maybe_new_var_set v (all_vars t) in
@@ -577,7 +577,7 @@ let genSOVarT = argfunT (fun s p ->
                      let x = maybe_new_var (Lm_symbol.add "x") [vv] in
                         expand := Some (mk_apply_term (mk_lambda_term x (mk_so_var_term vv conts [mk_var_term x])) t)
                 | _ ->
-                     eprintf "Warning: Itt_subst2.genSOVarT: collapse/expand code not fully implemented@."
+                     eprintf "Warning: Itt_struct2.genSOVarT: collapse/expand code not fully implemented@."
                end;
                List.fold_left mk_apply_term t' ts
             end else
