@@ -74,7 +74,7 @@ topval fold_lt : conv
 declare display_n : Dform
 declare display_ind{'x : Dform} : Dform
 declare display_ind_n : Dform
-declare display_ind_eq{'x : Dform; 'y : Dform} : Dform
+declare display_ind_eq{'x : Dform; 'y : Dform; 'a : Dform; 'b : Dform} : Dform
 
 prec prec_compare
 prec prec_add

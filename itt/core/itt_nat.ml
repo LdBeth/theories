@@ -103,9 +103,9 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    szone pushm[3]
      szone display_ind{'x} space `"where" space display_ind_n space `"=" ezone
    hspace
-     math_implies{display_ind_eq{display_n;0}; display_ind_eq{display_ind_n;'base}}
+     math_implies{math_equal{int;display_n; 0}; 'base}
    hspace
-     math_implies{math_gt{display_n; 0}; display_ind_eq{display_ind_n; 'up[display_n; display_ind{math_sub{display_n;1}}]}}
+     math_implies{math_gt{display_n; 0};display_ind_eq{'k;'l;math_sub{display_n;1};'up['k; 'l]}}
    popm ezone
 
 doc rewrites

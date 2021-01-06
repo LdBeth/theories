@@ -281,7 +281,7 @@ dform display_ind_df2 : display_ind_n =
    display_ind{display_n}
 
 dform ind_eq_df: except_mode[src] :: display_ind_eq{'x;'y;'a;'b} =
-   szone 'x `", " 'y `" = " display_n `"," display_ind{'a}
+   szone 'x `"," 'y `" = " display_n `"," display_ind{'a}
    hspace
     `"in " 'b ezone
 
@@ -294,7 +294,7 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    hspace
      math_implies{math_equal{int;display_n; 0};'base}
    hspace
-     math_implies{math_lt{0; display_n};display_ind_eq{'k;'l;math_sub{display_n;1};'up['k; 'l]}}
+     math_implies{math_gt{display_n ; 0};display_ind_eq{'k;'l;math_sub{display_n;1};'up['k; 'l]}}
    popm ezone
 
 doc <:doc<
