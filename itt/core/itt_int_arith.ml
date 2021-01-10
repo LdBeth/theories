@@ -736,7 +736,7 @@ let sumListT l = funT ( fun p ->
     | [] ->   idT
 )
 
-let num0 = num_of_int 0
+let num0 = zero_num
 (* unused
 let num1 = num_of_int 1
  *)
