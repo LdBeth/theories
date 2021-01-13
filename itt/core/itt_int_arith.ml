@@ -95,10 +95,6 @@ dform cdot_df : cdot =
  * ARITH
  *******************************************************)
 
-(* unused
-let identity x = x
- *)
-
 type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic)) option
 type ge_intro_type = tactic_arg -> (term list * tactic) option
 
