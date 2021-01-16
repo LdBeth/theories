@@ -797,6 +797,9 @@ struct
    let sub = sub_num
    let neg = neg_num
 
+   let gt = gt_num
+   let le = le_num
+
    (* Euclidean division and remainder. *)
    let rem = erem_num
    let div = ediv_num
@@ -1004,7 +1007,7 @@ let ge2af var2index (i,t) =
 	(i, f)
 
 let apply_rewrite p conv t =
-	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
+	let es={sequent_args= <<sequent_arg>>; sequent_hyps=SeqHyp.empty; sequent_concl=t} in
 	let s=mk_sequent_term es in
 	let s'=Top_conversionals.apply_rewrite p (addrC concl_addr conv) s in
 	TermMan.concl s'
@@ -1132,7 +1135,7 @@ let all_pairs l1 l2 =
 let norm constr =
 	let tree, f = constr in
 	let gcd = AF.gcd f in
-	if le_num gcd ringUnit then
+	if le gcd ringUnit then
 		constr
 	else
 		let c = rem (AF.coef f AF.constvar) gcd in
@@ -1154,7 +1157,7 @@ let rec min_index_aux pool result current =
 		result
 	else
 		let current_val = pool.(current) in
-		if (gt_num pool.(result) current_val) && (isPositive current_val) then
+		if (gt pool.(result) current_val) && (isPositive current_val) then
 			min_index_aux pool current (succ current)
 		else
 			min_index_aux pool result (succ current)
@@ -1163,7 +1166,7 @@ let rec min_index pool current =
 	if current = Array.length pool then
 		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
 	else
-		if gt_num pool.(current) ringZero then
+		if gt pool.(current) ringZero then
 			min_index_aux pool current (succ current)
 		else
 			min_index pool (succ current)
@@ -1172,7 +1175,7 @@ let pick_var pool constrs =
 	Array.fill pool 0 (Array.length pool) ringZero;
 	C.iter (compute_metric pool) constrs;
 	let result = min_index pool 0 in
-	if gt_num pool.(result) ringZero then
+	if gt pool.(result) ringZero then
 		succ result
 	else
 		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))

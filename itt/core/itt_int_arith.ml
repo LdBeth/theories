@@ -738,7 +738,7 @@ let num1 = num_of_int 1
  *)
 
 let term2term_number p t =
-   let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
+   let es={sequent_args=t; sequent_hyps=SeqHyp.empty; sequent_concl=t} in
    let s=mk_sequent_term es in
    let s'=Top_conversionals.apply_rewrite p (addrC concl_addr normalizeC) s in
    let t'=TermMan.concl s' in

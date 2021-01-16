@@ -45,7 +45,7 @@ let print_decl_smt ct v =
    fprintf ct "(declare-const v%i Int)\n" v
 
 let print_goal co printer =
-	fprintf co "sequent { %t >- \"false\" }\n" printer
+	fprintf co "sequent { %t >- \"false\" } = \"testT\"\n" printer
 
 let print_goal_smt ct printer =
    fprintf ct "(push) %t (check-sat) (pop)\n" printer
@@ -54,14 +54,14 @@ type ineq = Ge | Gt | Le | Lt | Eq | Ne
 
 let gen_ineq () =
 	match Random.int 6 with
-		0 -> Ge
+		 0 -> Ge
 	 | 1 -> Gt
 	 | 2 -> Le
 	 | 3 -> Lt
 	 | 4 -> Eq
 	 | _ -> Ne
 
-let print_ineq ineq e1 e2 co =
+let print_ineq (ineq, e1, e2) co =
 	match ineq with
      Ge -> fprintf co "%a >= %a" print_expr e1 print_expr e2
 	 | Gt -> fprintf co "%a > %a" print_expr e1 print_expr e2
@@ -70,7 +70,7 @@ let print_ineq ineq e1 e2 co =
 	 | Eq -> fprintf co "%a = %a in int" print_expr e1 print_expr e2
 	 | Ne -> fprintf co "%a <> %a" print_expr e1 print_expr e2
 
-let print_ineq_smt ineq e1 e2 ct =
+let print_ineq_smt (ineq, e1, e2) ct =
 	match ineq with
      Ge -> fprintf ct "(assert (>= %a %a))" print_expr_smt e1 print_expr_smt e2
 	 | Gt -> fprintf ct "(assert (> %a %a))" print_expr_smt e1 print_expr_smt e2
@@ -79,71 +79,52 @@ let print_ineq_smt ineq e1 e2 ct =
 	 | Eq -> fprintf ct "(assert (= %a %a))" print_expr_smt e1 print_expr_smt e2
 	 | Ne -> fprintf ct "(assert (not (= %a %a)))" print_expr_smt e1 print_expr_smt e2
 
-let print_all nineq nvars intrange maxdepth co =
+let gen_rule nineq nvars intrange maxdepth =
+   nvars, Array.init nineq (fun _ -> let e1 = gen_expr nvars intrange maxdepth in
+                                     let e2 = gen_expr nvars intrange maxdepth in
+                                     let ineq = gen_ineq () in
+                                        ineq, e1, e2)
+let print_all (nvars, eqs) co =
 	for i=1 to nvars do
      print_decl co i
 	done;
-	for i=1 to nineq do
-		let e1 = gen_expr nvars intrange maxdepth in
-		let e2 = gen_expr nvars intrange maxdepth in
-		let ineq = gen_ineq () in
-       fprintf co "\n%t" (print_ineq ineq e1 e2);
-       if i<nineq then
-          fprintf co ";"
-	done
+  let ub = Array.length eqs - 1 in
+     Array.iteri (fun i a -> fprintf co "\n%t" (print_ineq a);
+                             if i < ub then fprintf co ";") eqs
 
-let print_all_smt nineq nvars intrange maxdepth ct =
+let print_all_smt (nvars, eqs) ct =
    for i=1 to nvars do
      print_decl_smt ct i
 	done;
-	for _i=1 to nineq do
-		let e1 = gen_expr nvars intrange maxdepth in
-		let e2 = gen_expr nvars intrange maxdepth in
-		let ineq = gen_ineq () in
-       fprintf ct "\n%t" (print_ineq_smt ineq e1 e2)
-	done
+  Array.iter (fun a -> fprintf ct "\n%t" (print_ineq_smt a)) eqs
 
-let gen_rule co n nineq nvars intrange maxdepth =
-	fprintf co "\ninteractive test%i :\n" n;
-	print_goal co (print_all nineq nvars intrange maxdepth)
+let print_rule co n tests =
+	fprintf co "\nthm test%i :\n" n;
+	print_goal co (print_all tests)
 
-let gen_rule_smt ct n nineq nvars intrange maxdepth =
+let print_rule_smt ct n tests =
    fprintf ct "\n(echo \"interactive test%i :\")\n" n;
-   print_goal_smt ct (print_all_smt nineq nvars intrange maxdepth)
+   print_goal_smt ct (print_all_smt tests)
 
-let gen_bench ~name ~seed ~nrules ~nineq ~nvars ~intrange ~maxdepth =
+let gen_bench name ~smt ~seed ~nrules ~nineq ~nvars ~intrange ~maxdepth =
 	Random.init seed;
-	let co = open_out name in
+	let rules = Array.init nrules (fun _ -> gen_rule nineq nvars intrange maxdepth) in
+	let co = open_out (name ^ ".ml") in
 	fprintf co "extends Itt_int_test\n\n";
 	(* fprintf co "open Itt_int_test\n\n"; *)
-	for i=0 to nrules - 1 do
-     gen_rule co i nineq nvars intrange maxdepth
-	done;
-	flush co
+  Array.iteri (print_rule co) rules;
+	flush co;
+  (* generate smtlib files that can be checked by smt solver *)
+  if smt then
+     let ct = open_out (name ^ ".smt") in
+        Array.iteri (print_rule_smt ct) rules;
+        flush ct
 
-(* XXX: HACK: should be intergrate into gen_bench *)
-let gen_smt ~name ~seed ~nrules ~nineq ~nvars ~intrange ~maxdepth =
-	Random.init seed;
-	let ct = open_out name in
-	for i=0 to nrules - 1 do
-		gen_rule_smt ct i nineq nvars intrange maxdepth
-	done;
-	flush ct
+let _ = gen_bench "itt_int_bench"
+	~smt:true ~seed:23 ~nrules:10 ~nineq:10 ~nvars:5 ~intrange:10 ~maxdepth:3
 
-let _ = gen_bench ~name:"itt_int_bench.ml"
-	~seed:0 ~nrules:10 ~nineq:10 ~nvars:5 ~intrange:10 ~maxdepth:3
+let _ = gen_bench "itt_int_bench2"
+	~smt:true ~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
 
-let _ = gen_smt ~name:"itt_int_bench.smt"
-	~seed:0 ~nrules:10 ~nineq:10 ~nvars:5 ~intrange:10 ~maxdepth:3
-
-let _ = gen_bench ~name:"itt_int_bench2.ml"
-	~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
-
-let _ = gen_smt ~name:"itt_int_bench2.smt"
-	~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
-
-let _ = gen_bench ~name:"itt_int_bench3.ml"
-	~seed:0 ~nrules:100 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
-
-let _ = gen_smt ~name:"itt_int_bench3.smt"
-	~seed:0 ~nrules:100 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
+let _ = gen_bench "itt_int_bench3"
+	~smt:true ~seed:0 ~nrules:100 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
