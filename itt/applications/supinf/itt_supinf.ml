@@ -64,7 +64,7 @@ struct
 
 	let isNegative = function
 		Num (a,b) ->
-			((compare_num a num0) * (compare_num b num0)) < 0
+        ((Bool.to_int (is_neg a)) + (Bool.to_int (is_neg b))) = 1
 	 | PlusInfinity -> false
 	 | MinusInfinity -> true
 

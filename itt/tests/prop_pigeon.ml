@@ -81,7 +81,7 @@ let rec prove_disjunct pigeons = funT (fun p ->
  * Step 4: prove one of the negations.
  *)
 let rec prove_negation pigeons i =
-   (dT i thenT prove_disjunct pigeons) orelseT prove_negation pigeons (pred i)
+   if i = 1 then idT else (dT i thenT prove_disjunct pigeons) orelseT prove_negation pigeons (pred i)
 
 (*
  * Step 3: forward chain through the possible pigeon locations.

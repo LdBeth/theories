@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 
 # This script is intended to automate the process of generating
 # all the rewrites needed to determine the argument and result
@@ -9,8 +9,6 @@
 # explains (briefly) the input format the script expects.
 
 from string     import *
-from xreadlines import *
-
 
 # Global flags and variables.
 
@@ -273,7 +271,7 @@ def_file.write( get_def_file_header() )
 
 input_file = open( input, 'r' )
 
-for line in xreadlines( input_file ):
+for line in input_file.xreadlines():
    if line == '\n':
       pass
    elif line[0] == '#':

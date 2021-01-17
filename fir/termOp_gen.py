@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 
 # This script extracts term declarations from a file and generates
 # signatures and functions to construct and deconstruct those terms.
@@ -13,7 +13,6 @@
 # variables, have exactly one such subterm, and that it is the last subterm.
 
 from string     import *
-from xreadlines import *
 
 # Global flags and variables.
 
@@ -267,7 +266,7 @@ for file_name in inputs:
    print 'Processing file: ' + file_name
    input_file = open( file_name, 'r' )
 
-   for line in xreadlines( input_file ):
+   for line in input_file.xreadlines():
       if line[0:8] == 'declare ':
          process_line( strip( line[8:] ), sig_file, def_file )
 
