@@ -884,8 +884,6 @@ struct
 			let old_const = AF.coef old_f AF.constvar in
 			if Ring.compare old_const (AF.coef f AF.constvar) > 0 then
 				Hash.replace table key constr
-			else
-				()
 		with
 			Not_found ->
 				Hash.add table key constr
@@ -923,10 +921,7 @@ struct
 		List.iter (fun (k,d) -> add_aux constrs k d) l
 
 	let filter_aux predicate new_constrs k d =
-		if predicate k d then
-			add new_constrs d
-		else
-			()
+		if predicate k d then add new_constrs d
 
 	let filter predicate (dim,table) =
 		let new_constrs = create dim (Hash.length table) in
@@ -938,8 +933,6 @@ struct
 	let find_aux predicate k d =
 		if predicate k d then
 			raise (Found (k, d))
-		else
-			()
 
 	let find predicate (dim,table) =
 		try
@@ -1013,10 +1006,7 @@ let apply_rewrite p conv t =
 	TermMan.concl s'
 
 let is_neg_number f =
-	if AF.isNumber f then
-		isNegative (AF.coef f AF.constvar)
-	else
-		false
+	AF.isNumber f && isNegative (AF.coef f AF.constvar)
 
 (*********************************************************************
  * OMEGA
@@ -1654,13 +1644,12 @@ let isEmptyOrMainLabel l =
    (l="") || (List.mem l main_labels)
 
 let count_main_goals goall =
-	let count = ref 0 in
-	let aux g =
+	let aux count g =
 		if isEmptyOrMainLabel (Sequent.label g) then
-			count := succ (!count)
+       succ count
+    else count
 	in
-	List.iter aux goall;
-	!count
+     List.fold_left aux 0 goall
 
 let prefix_thenMLT =
    let rec combine tacl goall =
