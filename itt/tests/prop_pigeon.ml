@@ -32,7 +32,7 @@
 
 extends Itt_theory
 
-open Lm_debug
+(* open Lm_debug *)
 open Lm_printf
 
 open Basic_tactics
@@ -148,12 +148,7 @@ let proveT = funT (fun p ->
  * in itt_prop_decide.  We apply autoT to well-formedness subgoals
  * to knock them off as soon as possible.
  *)
-let _debug_prop_decide =
-  create_debug (**)
-     { debug_name = "prop_decide";
-       debug_description = "show propDecide operations";
-       debug_value = false
-     }
+(* let debug_prop_decide = load_debug "prop_decide" *)
 
 (* Like onSomeHyp, but works backwards. *)
 let revOnSomeHypT tac =

@@ -40,7 +40,7 @@ extends Itt_hoas_sequent_proof_step
 doc docoff
 
 open Lm_num
-open Lm_debug
+(* open Lm_debug *)
 open Lm_int_set
 open Basic_tactics
 open Itt_list
@@ -54,12 +54,14 @@ open Itt_hoas_sequent_proof_step
 open Itt_hoas_normalize
 open Itt_hoas_bterm_wf
 
-let _debug_sequent_proof =
+(*
+let debug_sequent_proof =
    create_debug (**)
       { debug_name = "sequent_proof1";
         debug_description = "debug Itt_hoas_sequent_proof tactics";
         debug_value = false
       }
+*)
 
 doc <:doc<
    Provability in a sequent logic.
