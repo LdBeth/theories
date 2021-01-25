@@ -885,12 +885,10 @@ let make_sacs var2index p =
    let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent_arg p).sequent_hyps in
    let ihyps = make_sacs_aux p 1 [] hyps in
    let afs=List.map (ge2af var2index) ihyps in
-   try
-       let f = List.find is_neg_number afs in
-       Contradiction (AF.getSource f)
-   with Not_found ->
-      let s = List.fold_left SACS.addConstr (SACS.empty (VI.length var2index)) afs in
-      Constraints s
+      match List.find_opt is_neg_number afs with
+         Some f -> Contradiction (AF.getSource f)
+       | None -> let s = List.fold_left SACS.addConstr (SACS.empty (VI.length var2index)) afs
+                 in Constraints s
 
 (*
 module TermPos=

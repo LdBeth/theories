@@ -290,13 +290,12 @@ interactive is_var_eq 'H 'J: <:xrule<
 let is_var_eq m n = (is_var_eq m (n-m) orelseT var_eq_rev m (n-m))
 
 
-(* XXX: HACK:
-if_var_eq should be defined as:
-  let if_var_eq m n = ifthenelseT ( is_var_eq m n)
-But unfortunately right now ifthenelseT is not defined  in faithful way.
-So, for now we use here a hack with the label "yes":
-*)
-let if_var_eq m n tac1 tac2 = tryT (is_var_eq m n) thenT ifLabT "yes" tac1 tac2
+(* XXX:
+ * if_var_eq should be defined as: *)
+let if_var_eq m n = ifthenelseT ( is_var_eq m n)
+
+(* originally we use here a hack with the label "yes":
+let if_var_eq m n tac1 tac2 = tryT (is_var_eq m n) thenT ifLabT "yes" tac1 tac2 *)
 
 let variable_elim2 m n = variable_elim2 m (n-m)
 
@@ -626,10 +625,10 @@ let quantSOVarT_aux s p =
    let e = mk_all_term v' ty_fun e in
 
    (* For instantiating the quantified form *)
-   let vars, _ =
-      List.fold_left (fun (vars, index) _ ->
+   let _, vars =
+      Lm_list_util.rev_fold_map (fun index _ ->
             let v = Lm_symbol.make "x" index in
-               v :: vars, succ index) ([], 1) !arity
+               succ index, v) 1 !arity
    in
    let t_vars = List.fold_left (fun tl v -> mk_var_term v :: tl) [] vars in
    let t_body = mk_so_var_term v !contexts t_vars in

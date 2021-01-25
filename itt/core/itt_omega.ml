@@ -378,7 +378,7 @@ struct
        | (k,[]) -> raise (Invalid_argument "MakeAF.term_of - empty data list linked to a key in list_of")
        | (k,_) -> raise (Invalid_argument "MakeAF.term_of - more than one data item per key in list_of")
       in
-      let aux2 (k,d) = if Ring.equal d Ring.ringZero then false else true in
+      let aux2 (k,d) = not (Ring.equal d Ring.ringZero) in
       term_of_aux info (List.filter aux2 (List.map aux l))
 
 end
@@ -1296,21 +1296,21 @@ let rec omega pool pool2 constrs =
 		eprintf "picked %a@." AF.print_var v;
 	let l, u, rest = get_bounds v constrs in
 	let pairs = all_pairs l u in
-	if !debug_omega then
-		eprintf "generated %i pairs@." (List.length pairs);
-	let new_constrs = List.rev_map (omega_aux v) pairs in
-	if !debug_omega then
-		eprintf "new constraints generated@.";
-	try
-		List.find (fun (tree, f) -> is_neg_number f) new_constrs
-	with Not_found ->
-		if !debug_omega then
-			eprintf "no contradiction found, building new table@.";
-		let new_constrs = C.of_list (Array.length pool) new_constrs in
-		C.append_list new_constrs rest;
-		if !debug_omega then
-			eprintf "calling omega@.";
-		omega pool pool2 new_constrs
+   if !debug_omega then
+      eprintf "generated %i pairs@." (List.length pairs);
+   let new_constrs = List.rev_map (omega_aux v) pairs in
+   if !debug_omega then
+      eprintf "new constraints generated@.";
+   match List.find_opt (fun (tree, f) -> is_neg_number f) new_constrs with
+      Some e -> e
+    | None ->
+         if !debug_omega then
+			   eprintf "no contradiction found, building new table@.";
+         let new_constrs = C.of_list (Array.length pool) new_constrs in
+            C.append_list new_constrs rest;
+            if !debug_omega then
+               eprintf "calling omega@.";
+            omega pool pool2 new_constrs
 
 interactive_rw zero_ge_to_left_rw :
    'a in int -->
@@ -1614,12 +1614,10 @@ let rec sim_make_sacs_aux p var2index l = function
 		)
 
 let sim_make_sacs p var2index constrs =
-	let afs = sim_make_sacs_aux p var2index [] (*REV*)(*List.rev*) (constrs)(*REV*) in
-	try
- 		let item = List.find (fun (i,f) -> is_neg_number f) afs in
- 		[item]
-	with Not_found ->
-		afs
+   let afs = sim_make_sacs_aux p var2index [] (*REV*)(*List.rev*) (constrs)(*REV*) in
+      match List.find_opt (fun (i,f) -> is_neg_number f) afs with
+        Some item -> [item]
+      | None -> afs
 
 let ge_elimT = argfunT (fun i p ->
    match Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p with
