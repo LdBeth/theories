@@ -256,7 +256,7 @@ let sqElimAllT = argfunT (fun i p ->
    let fwd, j = least_fw_index s.sequent_hyps vs1 vs2 (i - 1) in
    let t =
       mk_sequent_term { s with
-         sequent_hyps = SeqHyp.of_list (Lm_list_util.nth_tl j (SeqHyp.to_list s.sequent_hyps))
+         sequent_hyps = SeqHyp.drop j s.sequent_hyps
       }
    in
    let bind = var_subst_to_bind t (if fwd then t1 else t2) in

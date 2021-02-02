@@ -122,7 +122,7 @@ let genHypT = argfunT (fun i p ->
    let _, t1, _ = dest_equal (nth_hyp p i) in
    let s = explode_sequent_arg p in
    let t = mk_sequent_term { s with
-      sequent_hyps = SeqHyp.of_list (Lm_list_util.nth_tl (i-1) (SeqHyp.to_list s.sequent_hyps))
+      sequent_hyps = SeqHyp.drop (i-1) s.sequent_hyps
    }
    in
    let v =

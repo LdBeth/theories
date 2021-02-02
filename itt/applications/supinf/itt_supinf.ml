@@ -850,7 +850,7 @@ let ge2af var2index (i,t) =
    AF.hypSource i f
 
 let apply_rewrite p conv t =
-   let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
+   let es={sequent_args= <<sequent_arg>>; sequent_hyps=SeqHyp.empty; sequent_concl=t} in
    let s=mk_sequent_term es in
    let s'=Top_conversionals.apply_rewrite p (addrC concl_addr conv) s in
    TermMan.concl s'

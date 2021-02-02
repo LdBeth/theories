@@ -211,8 +211,8 @@ let elim_nat_eq fwd = argfunT (fun i p ->
                   let ind = snd (least_fw_index hyps (free_vars_set t_from) SymbolSet.empty (i - 1)) in
                   let bind_hyps = Lm_list_util.remove_nth (i - ind - 1) (Lm_list_util.nth_tl ind (SeqHyp.to_list hyps)) in
                   let v = maybe_new_var_set v (free_vars_terms [t; s.sequent_concl]) in
-                  let bind_hyps = bind_hyps @ [Hypothesis(v, mk_var_term v)] in
-                  let t = mk_sequent_term { s with sequent_hyps = SeqHyp.of_list bind_hyps } in
+                  let t = mk_sequent_term { s with sequent_hyps = SeqHyp.append_list SeqHyp.empty
+                                             bind_hyps (SeqHyp.singleton (Hypothesis(v, mk_var_term v))) } in
                   let bind = var_subst_to_bind t t_from in
                   let tac =
                      if alpha_equal (snd (dest_bind1 bind)) t then
