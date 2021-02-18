@@ -75,7 +75,7 @@ interactive sortedtree_subtype {| intro[] |}  univ[i:l]:
 define find: find{'a; 't; 'O} <-->
       tree_ind{'t;
         (* if t=empty *)       .emptytree;
-        (* if t=tree{self} *)  L,R,self. compare{'O;'a;.^data;
+        (* if t=tree{self} *)  L,R,self. compare{'O;'a;. ^data;
                                 (*if a<data *) 'L;
                                 (*if a=data *) 'self;
                                 (*if a>data *) 'R}}
@@ -95,7 +95,7 @@ interactive find_wf {| intro[] |}  univ[i:l]:
 define is_in_tree: is_in_tree{'a; 't; 'O} <-->
       tree_ind{'t;
         (* if t=empty *)       .bfalse;
-        (* if t=tree{self} *)  L,R,self. compare{'O;'a;.^data;
+        (* if t=tree{self} *)  L,R,self. compare{'O;'a;. ^data;
                                 (*if a<data *) 'L;
                                 (*if a=data *) btrue;
                                 (*if a>data *) 'R}}
@@ -123,10 +123,10 @@ interactive is_in_tree_correct  univ[i:l]:
 define insert: insert{'nd; 't; 'O} <-->
       tree_ind{'t;
         (* if t=empty *)       tree{(('nd^left:=emptytree) ^right:=emptytree)};
-        (* if t=tree{self} *)  L,R,self. compare{'O;.'nd^data;.^data;
-                                (*if a<data *) .^left:='L;
+        (* if t=tree{self} *)  L,R,self. compare{'O;.'nd^data;. ^data;
+                                (*if a<data *) . ^left:='L;
                                 (*if a=data *) tree{(('nd^left:=^left) ^right:=^right)};
-                                (*if a>data *) .^right:='R}}
+                                (*if a>data *) . ^right:='R}}
 
 doc docoff
 

@@ -142,7 +142,7 @@ define ins: ins{'a;'t;'ord} <-->
    tree_ind{'t;
      (* if t=emptree *) tree{(('a^left:=emptytree) ^right:=emptytree) ^color:=red};
      (* if t=tree(self) *) L,R,self.
-        compare{'ord;. 'a^data; .^data;
+        compare{'ord;. 'a^data; . ^data;
           (* if a<data *)  lbalance{^left:='L};
           (* if a=data *)  tree{(('a^left:=^left) ^right:=^right) ^color:=^color};
           (* if a>data *)  rbalance{^right:='R}
