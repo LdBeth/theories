@@ -1,5 +1,4 @@
 doc <:doc<
-   @spelling{th}
    @module[Itt_list2]
 
    The @tt{Itt_list2} module defines a ``library'' of
