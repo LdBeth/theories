@@ -426,8 +426,11 @@ doc <:doc<
    The @tt[unsquashT] tactic is added to @hrefresource[auto_resource],
    so @hreftactic[autoT] will unsquash the hypotheses whenever possible.
    @docoff
-   @comment{Squash a goal}
 >>
+
+(*
+ * Squash a goal
+ *)
 let unsquashT = argfunT (fun i p ->
    fst (Sequent.get_resource_arg p get_squash_resource) (Sequent.get_pos_hyp_num p i))
 

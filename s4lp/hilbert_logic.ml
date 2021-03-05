@@ -1,13 +1,14 @@
 open Lm_symbol
+open Lm_printf
 
 open Refiner.Refiner
 open Term
 open RefineError
 
 open Hilbert_internal
-(* open S4_logic *)
-(* open LP *)
-(* open S4G *)
+open S4_logic
+open LP
+open S4G
 
 module Structured_S4_Logic =
 struct
@@ -79,7 +80,7 @@ struct
    let append_inf inf hyp _ r =
       match r, inf with
          Ax, _ ->
-            (Axiom(term2formula hyp), FSet.empty, FSet.empty) :: inf
+            (S4G.Axiom(term2formula hyp), FSet.empty, FSet.empty) :: inf
        | Negl,t::ts ->
 		 		begin match term2formula hyp with
 					Neg a ->
@@ -170,7 +171,7 @@ open Structured_S4_Prover
 let rec fill_sequents hyps concls derivation =
 printf "\n%a\n>-\n%a\n" FSet.print hyps FSet.print concls;
 match derivation with
-	Axiom f as r, _, _ ->
+	 S4G.Axiom f as r, _, _ ->
 		r, hyps, concls
  | AxiomFalsum as r, _, _ ->
  		r, hyps, concls
@@ -382,10 +383,10 @@ let _ =
     | _ -> raise (Invalid_argument "resulting inference has more than one root")
 
 (* Wise men *)
-
+(*
 let m1 = Atom(add "m1")
 let m2 = Atom(add "m2")
-let m3 = Atom(add "m3")
+let m3 = Atom(add "m3") *)
 
 let kwh i a = Or(Box(Modal i, a), Box(Modal i, Neg a))
 (*
@@ -424,14 +425,14 @@ let mch4_KAO = Box(Modal 0,
 		]
 )
 
-let s = Or(kwh 1 c1, Or(kwh 2 c2, Or(kwh 3 c3, kwh 4  c4)))
+(* let s = Or(kwh 1 c1, Or(kwh 2 c2, Or(kwh 3 c3, kwh 4  c4))) *)
 
 let nbk = Box(Modal 0,
 	And(Neg(kwh 1 c1), And(Neg(kwh 2 c2), And(Neg(kwh 3 c3), Neg(kwh 4 c4))))
 )
 
 let s0 = And(c1, And(c2, And(Neg c3, Neg c4)))
-let s1 = Box(Modal 0, Or(c1, Or(c2, Or(c3, c4))))
+(* let s1 = Box(Modal 0, Or(c1, Or(c2, Or(c3, c4)))) *)
 let s2 =
    Box(Modal 0,
       Or(And(c1, c2),
@@ -441,7 +442,7 @@ let s2 =
       Or(And(c2, c4),
       And(c3, c4))))))
    )
-
+(*
 let s3 =
    Box(Modal 0,
       And(kwh 1 c1,
@@ -453,6 +454,7 @@ let short_KAO =
       And(kwh 1 c2, And(kwh 1 c3, And(kwh 1 c4,
       And(kwh 2 c1, And(kwh 2 c3, kwh 2 c4)))))
    )
+*)
 
 (*
 interactive muddy_children :

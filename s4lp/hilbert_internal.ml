@@ -31,22 +31,19 @@ struct
 
   let query f set =
     let result = ref None in
-      try
-         iter
-            (fun i ->
-          match f i with
-            Some x ->
-              result := Some x;
-              raise Success
-           | None ->
-              ()
-        )
-            set;
-         raise Not_found
-      with Success ->
-      match !result with
-        Some r -> r
-       | None -> raise Not_found
+       try
+          iter
+          (fun i ->
+                match f i with
+                   Some x ->
+                      result := Some x;
+                      raise Success
+                 | None ->
+                      ()
+          )
+          set;
+          raise Not_found
+       with Success -> Option.get !result
 
 end
 

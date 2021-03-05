@@ -1,3 +1,5 @@
+% -*- mode:prolog -*-
+
 takeout(X,[X|R],R).
 takeout(X,[F|R],[F|S]) :- takeout(X,R,S).
 
@@ -6,8 +8,8 @@ takeoutAll([X|R], From, To) :-
 	takeout(X, From, To0),
 	takeoutAll(R, To0, To).
 
-newMember(E, [E|T]).
-newMember(E, [H|T]) :- nonvar(H), newMember(E, T).
+member(E, [E|T]).
+member(E, [H|T]) :- nonvar(H), member(E, T).
 
 proof(axiom(S), Gamma, Delta, leaf) :-
 	member(S, Gamma),

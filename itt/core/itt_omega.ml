@@ -1332,6 +1332,7 @@ let ge_to_ge0C t =
 
 let normalize2C =	(termC ge_to_ge0C) thenC relNormC
 
+(*
 let totaltime = ref 0.
 let starttime = ref 0.
 
@@ -1361,6 +1362,7 @@ let endT = argfunT (fun i p ->
 	else
 		idT
 )
+*)
 
 let rec tree_stats h m mw s = function
 	Hyp _ -> ((succ h), m, mw, s)
@@ -1734,11 +1736,12 @@ let resource intro += [
    << 'a >= 'b >>, omega_intro;
 ]
 
+(*
 let getTimeT = funT (fun p ->
 	eprintf "spent %f seconds in omegaPrepT@." !total;
 	total := 0.;
 	failT
-)
+) *)
 
 (****************************
  * Currently I skip alternative branches only if first branch actually ignored current node constraint;
