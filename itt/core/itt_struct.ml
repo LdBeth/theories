@@ -332,7 +332,7 @@ doc <:doc<
    The @tactic[moveHypT] $i$ $j$ tactic used the @hrefrule[exchange] rule to @emph{move} a hypothesis
    in the current goal from position $i$ to position $j$. For example, when $j>i$,
    $$
-   @rulebox{moveHypT; i j;
+   @rulebox{moveHypT; i@ j;
      <<sequent{ <H>; "i. x": 'A; <J>; <K> >- 'C}>>;
      <<sequent{ <H>; <J>; "j. x": 'A; <K> >- 'C}>>}
    $$

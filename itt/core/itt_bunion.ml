@@ -146,7 +146,10 @@ doc docoff
 let thinLastT n = thinT (-1) thenT tryT (thinT n)
 doc docon
 
+(* This rule has to prove wfs, see tunionElimination_eq *)
 interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
+   [wf] sequent { <H>; x: 'A bunion 'B; <J['x]> >- 'A Type } -->
+   [wf] sequent { <H>; x: 'A bunion 'B; <J['x]> >- 'B Type } -->
    [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'A; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
    [main] sequent { <H>; x: 'A bunion 'B; <J['x]>; y: 'B; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
    sequent { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
