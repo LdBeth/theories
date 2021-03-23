@@ -73,25 +73,27 @@ doc <:doc<
 >>
 define opaque unfold_mul : "mul"{'a; 'b} <--> ind{'a; m, z. 'z -@ 'b; 0; m, z. 'z +@ 'b }
 
+define opaque unfold_rem:
+   "rem"{'a; 'b} <--> (let rem = lambda{a. lambda{b.
+                          ind{'a;
+                              m, n. if beq_int{1 -@ 'n; 'b}
+                                    then 0
+                                    else 'n -@ 1; 0;
+                              m, n. if beq_int{1 +@ 'n; 'b}
+                                    then 0
+                                    else 'n +@ 1}}}
+                       in 'rem 'a abs{'b})
+
 define opaque unfold_div :
    "div"{'a; 'b} <-->
    (let div =
-      fix{div.lambda{a. lambda{b.
-         if lt_bool{'a; 'b} then 0 else 1 + 'div ('a -@ 'b) 'b}}}
-   in
-      if lt_bool{'a; 0} then
-         if lt_bool{'b; 0} then
-            'div (-'a) (-'b)
-         else
-            -'div (-'a) 'b
-      else
-         if lt_bool{'b; 0} then
-            -'div 'a (-'b)
-         else
-            'div 'a 'b)
-
-define opaque unfold_rem:
-   "rem"{'a; 'b} <--> 'a -@ ("div"{'a; 'b} *@ 'b)
+      lambda{a. lambda{b.
+         ind{'a; m, n. 'n +@ (if beq_int{1 -@ rem{'m; 'b}; 'b}
+                              then 1 else 0); 0;
+             m, n. 'n -@ (if beq_int{1 +@ rem{'m; 'b}; 'b}
+                          then 1 else 0)}}}
+    in
+       sign{'b} *@ ('div 'a abs{'b}))
 
 (*
  Definitions of >b <=b >=b
@@ -283,19 +285,29 @@ dform intSeg_df1 : mode [prl] :: int_seg{'i; 'j} =
 
 let fold_int_seg = makeFoldC << int_seg{'i; 'j} >> unfold_int_seg
 
+doc <:doc< Max and min >>
+
 define unfold_max: max{'i;'j} <--> if 'i<@ 'j then 'j else 'i
 
 define unfold_min: min{'i;'j} <--> if 'i<@ 'j then 'i else 'j
 
-dform max_df : except_mode [src] :: max{'i; 'j} = `"max" `"(" 'i `"; " 'j ")"
-
-dform min_df : except_mode [src] :: min{'i; 'j} = `"min" `"(" 'i `"; " 'j ")"
+doc <:doc< Absolute value and sign >>
 
 define unfold_abs : abs{'a} <--> ind{'a;x,y.(-'a);0;x,y.'a}
 (*if 'a <@ 0 then -'a else 'a*)
 
 define unfold_sign : sign{'a} <--> ind{'a;x,y.(-1);0;x,y.1}
 (*if 'a <@ 0 then number[(-1):n] else if 0 <@ 'a then 1 else 0*)
+
+doc docoff
+
+dform max_df : except_mode [src] :: max{'i; 'j} = `"max(" 'i `"; " 'j `")"
+
+dform min_df : except_mode [src] :: min{'i; 'j} = `"min(" 'i `"; " 'j `")"
+
+dform abs_df : except_mode [src] :: abs{'a} = `"|" 'a `"|"
+
+dform sign_df : except_mode [src] :: sign{'a} = `"sign(" 'a `")"
 
 doc <:doc<
    @modsection{Rules and rewrites}
@@ -512,6 +524,8 @@ let indUpT = mkGuardT guarded_ind_up
 let resource elim +=
    <<int>>, wrap_elim (fun i -> (intElimination2 i thenT thinIfThinningT [i]) thenLT [indDownT; rwh reduce_ind_base 0; indUpT])
 
+doc docon
+
 interactive min_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -639,6 +653,14 @@ interactive min_le {| intro [] |} :
    sequent { <H> >- 'a >= 'x } -->
    sequent { <H> >- 'b >= 'x } -->
    sequent { <H> >- min{'a; 'b} >= 'x }
+
+interactive abs_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- abs{'a} in int }
+
+interactive sign_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- sign{'a} in int }
 
 doc <:doc<
    @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}
