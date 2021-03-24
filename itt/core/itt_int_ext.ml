@@ -658,6 +658,11 @@ interactive abs_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- abs{'a} in int }
 
+interactive abs_nequal_Zero {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'a <> 0 } -->
+   sequent { <H> >- abs{'a} <> 0 }
+
 interactive sign_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- sign{'a} in int }
@@ -892,6 +897,61 @@ interactive_rw beq_mulMono_rw 'c :
 	beq_int{'a;'b} <--> beq_int{'c *@ 'a; 'c *@ 'b}
 
 doc <:doc<
+   @modsection{Definition and well-formedness of <<'x %@ 'x>>}
+>>
+interactive rem_baseReduce :
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- 'a < 'b } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a %@ 'b) ~ 'a }
+
+interactive_rw rem_baseReduce_rw :
+   ('a >= 0) -->
+   ('a < 'b) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('a %@ 'b) <--> 'a
+
+let rem_baseReduceC = rem_baseReduce_rw
+
+interactive rem_neg :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) }
+
+interactive_rw rem_neg_rw :
+   ('b <> 0) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('a %@ 'b) <--> ('a %@ (-'b))
+
+let rem_negC = rem_neg_rw
+
+interactive rem_indReduce :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
+
+interactive_rw rem_indReduce_rw :
+   ('b <> 0) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   ((('a *@ 'b) +@ 'c) %@ 'b) <--> ('c %@ 'b)
+
+let rem_indReduceC = rem_indReduce_rw
+
+interactive rem_wf {| intro [] |} :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a %@ 'b) in int }
+
+doc <:doc<
    @modsection{Definition and properties of <<'x /@ 'x>>}
 >>
 interactive div_baseReduce :
@@ -992,61 +1052,6 @@ interactive_rw div_Assoc_rw :
    (('a /@ 'b) /@ 'c) <--> ('a /@ ('b *@ 'c))
 
 let div_AssocC = div_Assoc_rw
-
-doc <:doc<
-   @modsection{Definition and well-formedness of <<'x %@ 'x>>}
->>
-interactive rem_baseReduce :
-   sequent { <H> >- 'a >= 0 } -->
-   sequent { <H> >- 'a < 'b } -->
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a %@ 'b) ~ 'a }
-
-interactive_rw rem_baseReduce_rw :
-   ('a >= 0) -->
-   ('a < 'b) -->
-   ('a in int) -->
-   ('b in int) -->
-   ('a %@ 'b) <--> 'a
-
-let rem_baseReduceC = rem_baseReduce_rw
-
-interactive rem_neg :
-   sequent { <H> >- 'b <> 0 } -->
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) }
-
-interactive_rw rem_neg_rw :
-   ('b <> 0) -->
-   ('a in int) -->
-   ('b in int) -->
-   ('a %@ 'b) <--> ('a %@ (-'b))
-
-let rem_negC = rem_neg_rw
-
-interactive rem_indReduce :
-   sequent { <H> >- 'b <> 0 } -->
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
-
-interactive_rw rem_indReduce_rw :
-   ('b <> 0) -->
-   ('a in int) -->
-   ('b in int) -->
-   ('c in int) -->
-   ((('a *@ 'b) +@ 'c) %@ 'b) <--> ('c %@ 'b)
-
-let rem_indReduceC = rem_indReduce_rw
-
-interactive rem_wf {| intro [] |} :
-   sequent { <H> >- 'b <> 0 } -->
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a %@ 'b) in int }
 
 doc <:doc<
    @modsection{Integer segmentation properties}
