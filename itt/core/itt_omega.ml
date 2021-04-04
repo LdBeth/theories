@@ -59,7 +59,6 @@ open Itt_bool
 open Itt_int_base
 open Itt_int_ext
 open Itt_int_arith
-(*open Itt_supinf*)
 
 module Term = Refiner.Refiner.Term
 module TermMan = Refiner.Refiner.TermMan
@@ -1274,8 +1273,6 @@ let find_opposite constrs key c =
 		let constant = add (AF.coef f1 AF.constvar) (AF.coef f2 AF.constvar) in
 		if isNegative constant then
 			raise (OppositePair (c, opposite))
-		else
-			()
 	with Not_found ->
 		()
 

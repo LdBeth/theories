@@ -1,7 +1,6 @@
 extends Itt_theory
 extends Itt_reflection
 
-open Basic_tactics
 open Itt_reflection
 
 interactive wellformed_bterm_example 'J :

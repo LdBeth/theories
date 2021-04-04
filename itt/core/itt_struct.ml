@@ -506,6 +506,9 @@ doc <:doc<
    The @hreftactic[substT] tactic is resource-bases, which will allow adding other
    kinds of equality-based substitutions (such as squiggle substitution) in later theories.
 
+   The @hreftactic[hypSubstT] is a variant using hypothesis $i$, and @hreftactic[revHypSubstT]
+   is same except the equality hypothesis is used in reverse direction.
+
    @docoff
 >>
 

@@ -224,29 +224,6 @@ struct
          inverted.(index-1)
 end
 
-(* unused
-module MakeMonom(BField : BoundFieldSig) =
-struct
-   type elt = VarType.t
-   type data = BField.bfield
-
-   let compare = VarType.compare
-
-   let print out (v:elt) (kl: data list) =
-      match kl with
-         [k] -> BField.print out k; (*printf"*";*) VarType.print out v
-       | _ -> raise (Invalid_argument "More than one coefficient is associated with one variable")
-
-   let append l1 l2 =
-      match l1,l2 with
-         [],[] -> [BField.fieldZero]
-       | [],[a] -> [a]
-       | [a],[] -> [a]
-       | [a],[b] -> [BField.add a b]
-       | _,_ -> raise (Invalid_argument "Addition non-trivial lists are not supported")
-
-end
-*)
 (*
 let divideAuxC t =
    let left,right=dest_ge_rat in
