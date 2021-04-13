@@ -1,0 +1,9 @@
+THEORYNAME = itt_extensions_per
+THEORYDESCR = Extensions to Computational Type Theory - Some are experimental
+
+THEORY_DEPS[] +=
+    itt/core
+
+# Library files
+MPFILES[] =
+    itt_per

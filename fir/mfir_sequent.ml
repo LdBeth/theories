@@ -354,3 +354,5 @@ dform type_eq_list_df : except_mode[src] ::
 dform has_type_df : except_mode[src] ::
    has_type[str:s]{ 't; 'ty } =
    slot{'t} `":" slot{'ty} `" [" it[str:s] `"]"
+
+dform sequent_arg_df : sequent_arg = bf["m"]

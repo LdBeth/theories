@@ -201,20 +201,6 @@ let concl2geT = funT (fun p ->
 
 let all2geT = onAllMHypsT hyp2geT
 
-let rec all_hyps_aux hyps l i =
-   if i = 0 then l else
-   let j = pred i in
-      match SeqHyp.get hyps j with
-         Hypothesis (_, t) ->
-            all_hyps_aux hyps ((j+1,t)::l) j
-       | Context _ ->
-            all_hyps_aux hyps l j
-
-let all_hyps arg =
-   let hyps = (Sequent.explode_sequent_arg arg).sequent_hyps in
-   let len = Term.SeqHyp.length hyps in
-      all_hyps_aux hyps [] len
-
 let rec append tac len pos l = function
    t::tail ->
       append tac len (succ pos) ((t,pos,len,tac)::l) tail
@@ -260,7 +246,7 @@ let concl2ge p =
     | None -> []
 
 let allhyps2ge p tail =
-   hyp2ge p tail (all_hyps p)
+   hyp2ge p tail (all_hypsi p)
 
 let all2ge p =
    (*let pos, l = concl2ge p (succ (Sequent.hyp_count p)) in*)
@@ -712,7 +698,7 @@ let rec sumListAuxT tac len offset i l = funT ( fun p ->
     | [] -> idT (*raise (RefineError("Itt_int_arith.sumListT", StringError "impossible case"))*)
 )
 
-let sumListT l = funT ( fun p ->
+let sumListT p l =
    if !debug_int_arith then
       (eprintf "contradictory list:\n"; printList l;eflush stderr);
    match l with
@@ -720,17 +706,16 @@ let sumListT l = funT ( fun p ->
          let new_hyp_count = succ (len+(Sequent.hyp_count p)) in
          let offset = if i>=0 then 0 else new_hyp_count in
          let i = offset+i in
-         if !debug_int_arith then
-            eprintf "Itt_int_arith.sumList: only one inequality %i%t" i flush;
-         tac thenMT copyHypT i new_hyp_count
+            if !debug_int_arith then
+               eprintf "Itt_int_arith.sumList: only one inequality %i\n%!" i;
+            tac thenMT copyHypT i new_hyp_count
     | (_,_,_,(i,len,tac))::tl ->
          let offset = if i>=0 then 0 else succ (len+(Sequent.hyp_count p)) in
          let i = offset+i in
-         if !debug_int_arith then
-            eprintf "Itt_int_arith.sumList: %i items: %i%t" (List.length l) i flush;
-         tac thenMT (sumListAuxT tac len offset i tl)
-    | [] ->   idT
-)
+            if !debug_int_arith then
+               eprintf "Itt_int_arith.sumList: %i items: %i\n%!" (List.length l) i;
+            tac thenMT (sumListAuxT tac len offset i tl)
+    | [] -> idT
 
 let num0 = zero_num
 (* unused
@@ -887,7 +872,7 @@ let findContradRelT = funT ( fun p ->
    if !debug_int_arith then
       (eprintf "total list:\n"; printList l';eflush stderr);
    let l'' = Arith.find_contradiction l' in
-   sumListT l''
+   sumListT p l''
 )
 
 (*
