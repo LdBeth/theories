@@ -663,6 +663,14 @@ interactive abs_nequal_Zero {| intro [] |} :
    sequent { <H> >- 'a <> 0 } -->
    sequent { <H> >- abs{'a} <> 0 }
 
+interactive abs_neg {| intro []; nth_hyp |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- abs{(- 'a)} ~ abs{'a} }
+
+interactive_rw abs_neg_rw {| reduce; arith_unfold |} :
+   'a in int -->
+   abs{(- 'a)} <--> abs{'a}
+
 interactive sign_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- sign{'a} in int }

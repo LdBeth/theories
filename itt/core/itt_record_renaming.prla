@@ -2243,6 +2243,8 @@ T	t895	o754 b879
 B	b895	t895
 T	t896	o b895 b7
 B	b896	t896
+P	p6	String "byDefT (rename_fields << rename[\"<mul>\":t, \"<add>\" :t]{'add} >>)"
+O	o15	ext_rule p6
 T	t897	o175 b882 b884
 S	s897	t174\\ h\\ t897
 B	b897	s897
@@ -2250,14 +2252,16 @@ T	t898	o173 b897 b7
 B	b898	t898
 T	t899	o172 b898 b7
 B	b899	t899
-T	t900	o466 b899
-B	b900	t900
-T	t901	o168 b900
-B	b901	t901
-T	t902	o895 b896 b7 b879 b881 b901 b7
-B	b902	t902
-T	t903	o894 b902
-B	b903	t903
+T	t25	o171 b899 b7
+B	b25	t25
+T	t99	o15 b170 b25 b7 b7
+B	b99	t99
+T	t145	o168 b99
+B	b145	t145
+T	t150	o895 b896 b7 b879 b881 b145 b7
+B	b150	t150
+T	t155	o894 b150
+B	b155	t155
 P	p903	Number 17518
 P	p904	Number 17615
 O	o904	location p903 p904
@@ -2400,58 +2404,58 @@ T	t960	o b936 b959
 B	b960	t960
 T	t961	o b922 b960
 B	b961	t961
-T	t962	o b903 b961
-B	b962	t962
-T	t963	o b893 b962
-B	b963	t963
-T	t964	o b876 b963
-B	b964	t964
-T	t965	o b860 b964
-B	b965	t965
-T	t966	o b837 b965
-B	b966	t966
-T	t967	o b815 b966
-B	b967	t967
-T	t968	o b804 b967
-B	b968	t968
-T	t969	o b788 b968
-B	b969	t969
-T	t970	o b770 b969
-B	b970	t970
-T	t971	o b751 b970
-B	b971	t971
-T	t972	o b670 b971
-B	b972	t972
-T	t973	o b657 b972
-B	b973	t973
-T	t974	o b621 b973
-B	b974	t974
-T	t975	o b578 b974
-B	b975	t975
-T	t976	o b559 b975
-B	b976	t976
-T	t977	o b549 b976
-B	b977	t977
-T	t978	o b507 b977
-B	b978	t978
-T	t979	o b496 b978
-B	b979	t979
-T	t980	o b476 b979
-B	b980	t980
-T	t981	o b451 b980
-B	b981	t981
-T	t982	o b418 b981
-B	b982	t982
-T	t983	o b389 b982
-B	b983	t983
-T	t984	o b318 b983
-B	b984	t984
-T	t985	o b154 b984
-B	b985	t985
-T	t986	o b149 b985
-B	b986	t986
-T	t987	o b144 b986
-B	b987	t987
-T	t988	o b98 b987
-B	b988	t988
-T	t989	o b2 b988
+T	t156	o b155 b961
+B	b156	t156
+T	t157	o b893 b156
+B	b157	t157
+T	t158	o b876 b157
+B	b158	t158
+T	t159	o b860 b158
+B	b169	t159
+T	t169	o b837 b169
+B	b171	t169
+T	t171	o b815 b171
+B	b172	t171
+T	t172	o b804 b172
+B	b173	t172
+T	t173	o b788 b173
+B	b174	t173
+T	t175	o b770 b174
+B	b191	t175
+T	t238	o b751 b191
+B	b319	t238
+T	t319	o b670 b319
+B	b390	t319
+T	t390	o b657 b390
+B	b419	t390
+T	t419	o b621 b419
+B	b452	t419
+T	t452	o b578 b452
+B	b471	t452
+T	t471	o b559 b471
+B	b477	t471
+T	t477	o b549 b477
+B	b478	t477
+T	t478	o b507 b478
+B	b497	t478
+T	t497	o b496 b497
+B	b508	t497
+T	t508	o b476 b508
+B	b550	t508
+T	t550	o b451 b550
+B	b551	t550
+T	t551	o b418 b551
+B	b560	t551
+T	t560	o b389 b560
+B	b561	t560
+T	t561	o b318 b561
+B	b579	t561
+T	t579	o b154 b579
+B	b580	t579
+T	t580	o b149 b580
+B	b622	t580
+T	t622	o b144 b622
+B	b623	t622
+T	t623	o b98 b623
+B	b658	t623
+T	t658	o b2 b658
